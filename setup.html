@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SprintPilot Setup - Configure your AI-powered marketing sprint with automated campaign optimization and task management.">
+    <meta name="keywords" content="sprint setup, marketing configuration, AI campaign, sprint planning, business goals">
+    <title>Sprint Setup - SprintPilot AI Marketing Sprint Platform</title>
+    <link rel="canonical" href="/setup.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0A1628;
+            color: #FFFFFF;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Skip Link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #FF6B35;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            z-index: 100;
+            border-radius: 0 0 8px 0;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: rgba(10, 22, 40, 0.95);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #FF6B35;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            color: #FFFFFF;
+        }
+
+        .logo-text span {
+            color: #FF6B35;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-center a {
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.2s;
+            padding: 8px 0;
+        }
+
+        .nav-center a:hover,
+        .nav-center a:focus {
+            color: #FF6B35;
+            outline: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn-login {
+            background: transparent;
+            border: 2px solid #8B94A3;
+            color: #FFFFFF;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-login:hover {
+            border-color: #FF6B35;
+            color: #FF6B35;
+        }
+
+        .btn-start {
+            background: #FF6B35;
+            border: none;
+            color: #FFFFFF;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-start:hover {
+            background: #ff8052;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: 2px solid #FF6B35;
+            color: #FF6B35;
+            font-size: 24px;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        /* Hero */
+        .setup-hero {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .setup-hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .setup-hero h1 .highlight {
+            color: #FF6B35;
+        }
+
+        .setup-hero-subtitle {
+            font-size: 18px;
+            color: #8B94A3;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Setup Form Card */
+        .setup-card {
+            background: linear-gradient(135deg, #2D3F5F 0%, #1a2942 100%);
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 48px;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 32px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin-bottom: 12px;
+        }
+
+        .form-input {
+            width: 100%;
+            background: #1a2942;
+            border: 2px solid #FF6B35;
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 16px;
+            color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ff8052;
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #8B94A3;
+        }
+
+        /* Business Type Pills */
+        .business-type-section {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .business-type-dropdown {
+            background: #1a2942;
+            border: 2px solid #3d5170;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 16px;
+            color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            min-width: 180px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%238B94A3' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 44px;
+        }
+
+        .business-type-pill {
+            background: #1a2942;
+            border: 2px solid #FF6B35;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 15px;
+            color: #FFFFFF;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .business-type-pill:hover {
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        /* Goals Grid */
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .goal-card {
+            background: #1a2942;
+            border: 2px solid #3d5170;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .goal-card.active {
+            border-color: #FF6B35;
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .goal-card:hover {
+            border-color: #FF6B35;
+            transform: translateY(-2px);
+        }
+
+        .goal-toggle {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 48px;
+            height: 24px;
+            background: #3d5170;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .goal-card.active .goal-toggle {
+            background: #FF6B35;
+        }
+
+        .goal-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: #FFFFFF;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .goal-card.active .goal-toggle::after {
+            left: 26px;
+        }
+
+        .goal-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .goal-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin-bottom: 6px;
+        }
+
+        .goal-description {
+            font-size: 12px;
+            color: #8B94A3;
+            line-height: 1.5;
+        }
+
+        /* Keywords Section */
+        .keywords-help {
+            font-size: 14px;
+            color: #8B94A3;
+            margin-top: 8px;
+        }
+
+        .keywords-help .highlight-word {
+            color: #FF6B35;
+            font-style: italic;
+        }
+
+        /* Summary Cards Grid */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #2D3F5F 0%, #1a2942 100%);
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .summary-card h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #FFFFFF;
+        }
+
+        .summary-item {
+            margin-bottom: 20px;
+        }
+
+        .summary-item-label {
+            font-size: 14px;
+            color: #8B94A3;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .summary-item-value {
+            font-size: 16px;
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+
+        /* Chart */
+        .impact-chart {
+            background: #1a2942;
+            border-radius: 12px;
+            padding: 24px;
+            height: 320px;
+            position: relative;
+        }
+
+        .chart-grid {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            right: 24px;
+            bottom: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .chart-grid-line {
+            border-top: 1px solid rgba(255, 107, 53, 0.1);
+            position: relative;
+        }
+
+        .chart-y-label {
+            position: absolute;
+            left: -30px;
+            top: -8px;
+            font-size: 12px;
+            color: #8B94A3;
+        }
+
+        .chart-area {
+            position: absolute;
+            bottom: 48px;
+            left: 24px;
+            right: 24px;
+            height: 250px;
+        }
+
+        .chart-path {
+            fill: rgba(255, 107, 53, 0.2);
+            stroke: #FF6B35;
+            stroke-width: 3;
+        }
+
+        .chart-point {
+            fill: #FF6B35;
+            stroke: #FFFFFF;
+            stroke-width: 3;
+        }
+
+        .chart-x-axis {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            right: 24px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .chart-x-label {
+            font-size: 12px;
+            color: #8B94A3;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            background: linear-gradient(135deg, #2D3F5F 0%, #1a2942 100%);
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 32px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary-large {
+            flex: 1;
+            background: #FF6B35;
+            border: none;
+            color: #FFFFFF;
+            padding: 18px 48px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary-large:hover {
+            background: #ff8052;
+            box-shadow: 0 8px 32px rgba(255, 107, 53, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary-large {
+            background: transparent;
+            border: 2px solid #8B94A3;
+            color: #FFFFFF;
+            padding: 18px 48px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary-large:hover {
+            border-color: #FF6B35;
+            color: #FF6B35;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .goals-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .nav-center,
+            .nav-actions {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #0A1628;
+                flex-direction: column;
+                padding: 24px;
+                border-top: 1px solid rgba(255, 107, 53, 0.2);
+            }
+
+            .nav-center.active,
+            .nav-actions.active {
+                display: flex;
+            }
+
+            .setup-hero h1 {
+                font-size: 36px;
+            }
+
+            .setup-card {
+                padding: 24px;
+            }
+
+            .goals-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .business-type-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .business-type-dropdown,
+            .business-type-pill {
+                width: 100%;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-primary-large,
+            .btn-secondary-large {
+                width: 100%;
+            }
+        }
+
+        /* Accessibility */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        *:focus {
+            outline: 2px solid #FF6B35;
+            outline-offset: 2px;
+        }
+
+        button:focus,
+        a:focus,
+        input:focus,
+        select:focus {
+            outline: 2px solid #FF6B35;
+            outline-offset: 2px;
+        }
+
+        /* Loading State */
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        .loading {
+            background: linear-gradient(90deg, #2D3F5F 0%, #3d5170 50%, #2D3F5F 100%);
+            background-size: 2000px 100%;
+            animation: shimmer 2s infinite linear;
+        }
+    </style>
+</head>
+<body data-page="setup">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header role="banner">
+        <nav role="navigation" aria-label="Main navigation" data-component="top-nav">
+            <a href="index.html" class="logo" aria-label="SprintPilot home" data-nav="home">
+                <div class="logo-icon">S</div>
+                <span class="logo-text">Sprint<span>Pilot</span></span>
+            </a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+                ?
+            </button>
+            <ul class="nav-center" id="nav-menu">
+                <li><a href="index.html" data-nav="home">Home</a></li>
+                <li><a href="setup.html" data-nav="setup">Setup</a></li>
+                <li><a href="calendar.html" data-nav="calendar">Calendar</a></li>
+                <li><a href="daily.html" data-nav="daily">Daily</a></li>
+                <li><a href="coach.html" data-nav="coach">Coach</a></li>
+            </ul>
+            <div class="nav-actions" id="nav-actions">
+                <button class="btn-login">Login</button>
+                <button class="btn-start">Start Sprint</button>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content" role="main" data-region="content">
+        <section class="setup-hero">
+            <h1>Sprint <span class="highlight">Setup</span></h1>
+            <p class="setup-hero-subtitle">AI-powered command center for campaign optimization</p>
+        </section>
+
+        <section class="setup-card">
+            <form id="setup-form" aria-label="Sprint setup form">
+                <div class="form-group">
+                    <label for="website-url" class="form-label">Website URL</label>
+                    <input 
+                        type="url" 
+                        id="website-url" 
+                        class="form-input" 
+                        placeholder="www.example.com/product"
+                        aria-required="true"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Business Type</label>
+                    <div class="business-type-section" data-component="pill-set">
+                        <select id="business-type" class="business-type-dropdown" aria-label="Select business type">
+                            <option value="">Business Type</option>
+                            <option value="saas">SaaS</option>
+                            <option value="ecommerce">E-commerce</option>
+                            <option value="agency">Agency</option>
+                            <option value="b2b">B2B</option>
+                            <option value="b2c">B2C</option>
+                        </select>
+                        <button type="button" class="business-type-pill" data-type="saas" data-pill="saas" aria-pressed="false">SaaS</button>
+                        <button type="button" class="business-type-pill" data-type="ecommerce" data-pill="ecommerce" aria-pressed="false">E-commerce</button>
+                        <button type="button" class="business-type-pill" data-type="agency" data-pill="agency" aria-pressed="false">Agency</button>
+                        <button type="button" class="business-type-pill" data-type="b2b" data-pill="b2b" aria-pressed="false">B2B</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Goals</label>
+                    <div class="goals-grid">
+                        <div class="goal-card active" data-goal="traffic" data-component="goal-card" data-id="traffic">
+                            <button type="button" class="goal-toggle" aria-pressed="true"></button>
+                            <span class="goal-icon">?</span>
+                            <div class="goal-title">Increase Traffic</div>
+                            <div class="goal-description">Increase traffic on fast website traffic.</div>
+                        </div>
+
+                        <div class="goal-card active" data-goal="leads" data-component="goal-card" data-id="leads">
+                            <button type="button" class="goal-toggle" aria-pressed="true"></button>
+                            <span class="goal-icon">?</span>
+                            <div class="goal-title">Generate Leads</div>
+                            <div class="goal-description">Generate leads, conto, and sserctions.</div>
+                        </div>
+
+                        <div class="goal-card active" data-goal="sales" data-component="goal-card" data-id="sales">
+                            <button type="button" class="goal-toggle" aria-pressed="true"></button>
+                            <span class="goal-icon">?</span>
+                            <div class="goal-title">Boost Sales</div>
+                            <div class="goal-description">Increase boot growth and streoms.</div>
+                        </div>
+
+                        <div class="goal-card" data-goal="engagement" data-component="goal-card" data-id="engagement">
+                            <button type="button" class="goal-toggle" aria-pressed="false"></button>
+                            <span class="goal-icon">?</span>
+                            <div class="goal-title">Improve Engagement</div>
+                            <div class="goal-description">Improve your campaign engagement.</div>
+                        </div>
+
+                        <div class="goal-card" data-goal="geodenu" data-component="goal-card" data-id="geodenu">
+                            <button type="button" class="goal-toggle" aria-pressed="false"></button>
+                            <span class="goal-icon">?</span>
+                            <div class="goal-title">Geodenu tmnw</div>
+                            <div class="goal-description">Mest poseicoprate neur emadement.</div>
+                        </div>
+
+                        <div class="goal-card active" data-goal="insights" data-component="goal-card" data-id="insights">
+                            <button type="button" class="goal-toggle" aria-pressed="true"></button>
+                            <span class="goal-icon">?</span>
+                            <div class="goal-title">Improve Insxits</div>
+                            <div class="goal-description">Increase the lenpase oodes.</div>
+                        </div>
+
+                        <div class="goal-card" data-goal="marin" data-component="goal-card" data-id="marin">
+                            <button type="button" class="goal-toggle" aria-pressed="false"></button>
+                            <span class="goal-icon">?</span>
+                            <div class="goal-title">Marin Ineimto</div>
+                            <div class="goal-description">Eenerictsct from the alort Hew situations.</div>
+                        </div>
+
+                        <div class="goal-card" data-goal="training" data-component="goal-card" data-id="training">
+                            <button type="button" class="goal-toggle" aria-pressed="false"></button>
+                            <span class="goal-icon">??</span>
+                            <div class="goal-title">Boost Training</div>
+                            <div class="goal-description">Improve your campaign interferone.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="keywords" class="form-label">Keywords</label>
+                    <input 
+                        type="text" 
+                        id="keywords" 
+                        class="form-input" 
+                        placeholder="Enter keywords..."
+                    >
+                    <div class="keywords-help">
+                        Dersact, oarno;nducto eneroils used to get eant in safre <span class="highlight-word">sprint ion</span> recranty.
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <section class="summary-grid">
+            <article class="summary-card">
+                <h2>Configuration Summary</h2>
+                <div class="summary-item">
+                    <div class="summary-item-label">Website URL</div>
+                    <div class="summary-item-value">Increase Traffic<br>www.example.com/product</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-item-label">Business Type</div>
+                    <div class="summary-item-value">SaaS, E-commerce, Agency<br>Improve Engagement</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-item-label">Targets</div>
+                    <div class="summary-item-value">B2B, Ad Impact</div>
+                </div>
+            </article>
+
+            <article class="summary-card">
+                <h2>Estimated Impact</h2>
+                <div class="impact-chart">
+                    <svg width="100%" height="100%" viewBox="0 0 600 320" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#FF6B35;stop-opacity:0.3" />
+                                <stop offset="100%" style="stop-color:#FF6B35;stop-opacity:0" />
+                            </linearGradient>
+                        </defs>
+                        <path class="chart-path" d="M 0 250 L 75 220 L 150 235 L 225 170 L 300 190 L 375 120 L 450 135 L 525 90 L 600 80 L 600 300 L 0 300 Z" fill="url(#chartGradient)" />
+                        <path class="chart-path" d="M 0 250 L 75 220 L 150 235 L 225 170 L 300 190 L 375 120 L 450 135 L 525 90 L 600 80" fill="none" />
+                        <circle class="chart-point" cx="0" cy="250" r="6" />
+                        <circle class="chart-point" cx="75" cy="220" r="6" />
+                        <circle class="chart-point" cx="150" cy="235" r="6" />
+                        <circle class="chart-point" cx="225" cy="170" r="6" />
+                        <circle class="chart-point" cx="300" cy="190" r="6" />
+                        <circle class="chart-point" cx="375" cy="120" r="6" />
+                        <circle class="chart-point" cx="450" cy="135" r="6" />
+                        <circle class="chart-point" cx="525" cy="90" r="6" />
+                        <circle class="chart-point" cx="600" cy="80" r="6" />
+                    </svg>
+                    <div class="chart-x-axis">
+                        <span class="chart-x-label">Jan</span>
+                        <span class="chart-x-label">Feb</span>
+                        <span class="chart-x-label">Mar</span>
+                        <span class="chart-x-label">Apr</span>
+                        <span class="chart-x-label">May</span>
+                        <span class="chart-x-label">Jun</span>
+                        <span class="chart-x-label">Jul</span>
+                        <span class="chart-x-label">Aug</span>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section class="action-buttons" data-component="sticky-bar">
+            <button type="button" class="btn-primary-large" id="start-sprint-btn" data-action="start">Start Sprint</button>
+            <button type="button" class="btn-secondary-large" id="save-draft-btn" data-action="save">Save Draft</button>
+        </section>
+    </main>
+
+    <div data-component="toast-root" aria-live="polite" aria-atomic="true" style="position:fixed;bottom:24px;right:24px;z-index:1000;"></div>
+
+    <script>
+        // Provide global API and init
+        (function () {
+            const SprintPilot = {
+                _listeners: [],
+                _state: {
+                    page: document.body && document.body.getAttribute('data-page') || null
+                },
+                init() {
+                    // integrity check: body[data-page] must be present and equal to 'setup'
+                    const body = document.body;
+                    if (!body || body.getAttribute('data-page') !== 'setup') {
+                        const ev = new CustomEvent('sprint:integrity:fail', { detail: { reason: 'missing-or-invalid-body-data-page' }});
+                        window.dispatchEvent(ev);
+                        console.error('SprintPilot integrity check failed: body[data-page="setup"] required.');
+                        return;
+                    }
+
+                    // wire top nav active based on page
+                    const topNav = document.querySelector('nav[data-component="top-nav"]');
+                    const page = body.getAttribute('data-page');
+                    this._state.page = page;
+                    if (topNav) {
+                        topNav.setAttribute('data-nav-active', page);
+                        const anchors = topNav.querySelectorAll('[data-nav]');
+                        anchors.forEach(a => {
+                            if (a.getAttribute('data-nav') === page) {
+                                a.setAttribute('aria-current', 'page');
+                            } else {
+                                a.removeAttribute('aria-current');
+                            }
+                            // click handler to change active
+                            const fn = (e) => {
+                                const navName = a.getAttribute('data-nav');
+                                topNav.setAttribute('data-nav-active', navName);
+                                anchors.forEach(x => x.removeAttribute('aria-current'));
+                                a.setAttribute('aria-current', 'page');
+                                const ev = new CustomEvent('sprint:nav:change', { detail: { nav: navName }});
+                                window.dispatchEvent(ev);
+                            };
+                            a.addEventListener('click', fn);
+                            this._listeners.push({ el: a, fn: fn, type: 'click' });
+                        });
+                    }
+
+                    // initialize pills: set aria-pressed states and bind events
+                    const pillSet = document.querySelector('[data-component="pill-set"]');
+                    if (pillSet) {
+                        const dropdown = pillSet.querySelector('#business-type') || document.getElementById('business-type');
+                        const pills = pillSet.querySelectorAll('.business-type-pill[data-pill]');
+                        pills.forEach(p => {
+                            // ensure aria-pressed exists
+                            if (!p.hasAttribute('aria-pressed')) p.setAttribute('aria-pressed', 'false');
+                            const fn = (e) => {
+                                const val = p.getAttribute('data-pill') || p.getAttribute('data-type');
+                                if (dropdown) dropdown.value = val;
+                                // toggle pressed single-select
+                                pills.forEach(x => x.setAttribute('aria-pressed', 'false'));
+                                p.setAttribute('aria-pressed', 'true');
+                                const ev = new CustomEvent('sprint:pill:change', { detail: { pill: val }});
+                                window.dispatchEvent(ev);
+                            };
+                            p.addEventListener('click', fn);
+                            this._listeners.push({ el: p, fn: fn, type: 'click' });
+                        });
+                    }
+
+                    // initialize goal toggles
+                    const goalCards = document.querySelectorAll('[data-component="goal-card"]');
+                    goalCards.forEach(card => {
+                        const id = card.getAttribute('data-id') || card.getAttribute('data-goal');
+                        const toggle = card.querySelector('.goal-toggle');
+                        if (!toggle) return;
+                        // ensure aria-pressed present
+                        if (!toggle.hasAttribute('aria-pressed')) toggle.setAttribute('aria-pressed', 'false');
+                        // sync visual with .active class
+                        if (card.classList.contains('active')) {
+                            toggle.setAttribute('aria-pressed', 'true');
+                        } else {
+                            toggle.setAttribute('aria-pressed', 'false');
+                        }
+                        const fn = (e) => {
+                            const pressed = toggle.getAttribute('aria-pressed') === 'true';
+                            const newPressed = !pressed;
+                            toggle.setAttribute('aria-pressed', String(newPressed));
+                            card.classList.toggle('active', newPressed);
+                            if (newPressed) card.classList.add('is-selected'); else card.classList.remove('is-selected');
+                            const ev = new CustomEvent('sprint:goal:toggle', { detail: { id: id, pressed: newPressed }});
+                            window.dispatchEvent(ev);
+                        };
+                        toggle.addEventListener('click', fn);
+                        card.addEventListener('keydown', function(e) {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                toggle.click();
+                            }
+                        });
+                        this._listeners.push({ el: toggle, fn: fn, type: 'click' });
+                    });
+
+                    // sticky bar behavior
+                    const sticky = document.querySelector('[data-component="sticky-bar"]');
+                    const onScroll = () => {
+                        if (!sticky) return;
+                        const isSticky = window.scrollY > 140;
+                        sticky.classList.toggle('is-sticky', isSticky);
+                        const ev = new CustomEvent('sprint:sticky:change', { detail: { isSticky }});
+                        window.dispatchEvent(ev);
+                    };
+                    window.addEventListener('scroll', onScroll);
+                    this._listeners.push({ el: window, fn: onScroll, type: 'scroll' });
+                    onScroll();
+
+                    // action buttons in sticky bar
+                    if (sticky) {
+                        const actions = sticky.querySelectorAll('[data-action]');
+                        actions.forEach(btn => {
+                            const act = btn.getAttribute('data-action');
+                            const fn = () => {
+                                const ev = new CustomEvent('sprint:action:' + act, { detail: { action: act }});
+                                window.dispatchEvent(ev);
+                            };
+                            btn.addEventListener('click', fn);
+                            this._listeners.push({ el: btn, fn: fn, type: 'click' });
+                        });
+                    }
+
+                    // toast root ensure exists
+                    const toastRoot = document.querySelector('[data-component="toast-root"]');
+                    if (!toastRoot) {
+                        console.warn('SprintPilot: toast root not found.');
+                    }
+
+                    // page ready event
+                    const readyEv = new CustomEvent('sprint:page:ready', { detail: { page: this._state.page }});
+                    window.dispatchEvent(readyEv);
+                },
+                teardown() {
+                    // remove listeners added via init
+                    this._listeners.forEach(it => {
+                        if (it.el && it.fn && it.type) {
+                            try { it.el.removeEventListener(it.type, it.fn); } catch (e) {}
+                        }
+                    });
+                    this._listeners = [];
+                },
+                notify(message, opts) {
+                    const toastRoot = document.querySelector('[data-component="toast-root"]');
+                    if (!toastRoot) return;
+                    const toast = document.createElement('div');
+                    toast.setAttribute('data-toast', '');
+                    toast.textContent = message;
+                    toast.style.background = '#1a2942';
+                    toast.style.color = '#fff';
+                    toast.style.border = '2px solid #FF6B35';
+                    toast.style.padding = '12px 16px';
+                    toast.style.marginTop = '8px';
+                    toast.style.borderRadius = '8px';
+                    toast.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3)';
+                    toastRoot.appendChild(toast);
+                    const showEv = new CustomEvent('sprint:toast:show', { detail: { message }});
+                    window.dispatchEvent(showEv);
+                    const timeout = (opts && opts.timeout) || 3000;
+                    setTimeout(() => {
+                        try { toastRoot.removeChild(toast); } catch (e) {}
+                        const hideEv = new CustomEvent('sprint:toast:hide', { detail: { message }});
+                        window.dispatchEvent(hideEv);
+                    }, timeout);
+                },
+                toggleGoal(id, pressed) {
+                    const card = document.querySelector('[data-component="goal-card"][data-id="' + id + '"]');
+                    if (!card) return;
+                    const toggle = card.querySelector('.goal-toggle');
+                    const newPressed = typeof pressed === 'boolean' ? pressed : !(toggle.getAttribute('aria-pressed') === 'true');
+                    toggle.setAttribute('aria-pressed', String(newPressed));
+                    card.classList.toggle('active', newPressed);
+                    if (newPressed) card.classList.add('is-selected'); else card.classList.remove('is-selected');
+                    const ev = new CustomEvent('sprint:goal:toggle', { detail: { id: id, pressed: newPressed }});
+                    window.dispatchEvent(ev);
+                },
+                openDrawer() {
+                    const ev = new CustomEvent('sprint:drawer:open');
+                    window.dispatchEvent(ev);
+                },
+                closeDrawer() {
+                    const ev = new CustomEvent('sprint:drawer:close');
+                    window.dispatchEvent(ev);
+                },
+                getState() {
+                    return Object.assign({}, this._state);
+                }
+            };
+
+            window.SprintPilot = SprintPilot;
+
+            // wire init on DOMContentLoaded
+            document.addEventListener('DOMContentLoaded', function () {
+                if (window.SprintPilot && typeof window.SprintPilot.init === 'function') {
+                    window.SprintPilot.init();
+                }
+            });
+        })();
+
+        // Mobile menu toggle
+        (function() {
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            const navCenter = document.querySelector('.nav-center');
+            const navActions = document.querySelector('.nav-actions');
+            
+            if (toggle && navCenter && navActions) {
+                toggle.addEventListener('click', function() {
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    this.setAttribute('aria-expanded', !isExpanded);
+                    navCenter.classList.toggle('active');
+                    navActions.classList.toggle('active');
+                });
+
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && navCenter.classList.contains('active')) {
+                        toggle.setAttribute('aria-expanded', 'false');
+                        navCenter.classList.remove('active');
+                        navActions.classList.remove('active');
+                        toggle.focus();
+                    }
+                });
+            }
+        })();
+
+        // Business type pill selection (enhanced: also set aria-pressed)
+        document.querySelectorAll('.business-type-pill').forEach(pill => {
+            pill.addEventListener('click', function() {
+                const type = this.getAttribute('data-type');
+                const dropdown = document.getElementById('business-type');
+                if (dropdown) {
+                    dropdown.value = type;
+                }
+                // Visual pressed state (single-select)
+                const container = this.closest('[data-component="pill-set"]');
+                if (container) {
+                    container.querySelectorAll('.business-type-pill').forEach(b => b.setAttribute('aria-pressed', 'false'));
+                }
+                this.setAttribute('aria-pressed', 'true');
+
+                // emit event unconditionally so other systems can respond
+                const ev = new CustomEvent('sprint:pill:change', { detail: { pill: this.getAttribute('data-pill') || type }});
+                window.dispatchEvent(ev);
+            });
+        });
+
+        // Goal card toggle (updated to use inner button aria-pressed)
+        document.querySelectorAll('.goal-card').forEach(card => {
+            const toggleBtn = card.querySelector('.goal-toggle');
+            if (!toggleBtn) return;
+
+            function toggleGoalLocal() {
+                const isPressed = toggleBtn.getAttribute('aria-pressed') === 'true';
+                const newPressed = !isPressed;
+                toggleBtn.setAttribute('aria-pressed', String(newPressed));
+                card.classList.toggle('active', newPressed);
+                if (newPressed) card.classList.add('is-selected'); else card.classList.remove('is-selected');
+
+                const id = card.getAttribute('data-id') || card.getAttribute('data-goal');
+                const ev = new CustomEvent('sprint:goal:toggle', { detail: { id: id, pressed: newPressed }});
+                window.dispatchEvent(ev);
+            }
+
+            toggleBtn.addEventListener('click', toggleGoalLocal);
+            
+            card.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleGoalLocal();
+                }
+            });
+        });
+
+        // Form validation
+        const setupForm = document.getElementById('setup-form');
+        const websiteInput = document.getElementById('website-url');
+
+        if (setupForm) {
+            setupForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (!websiteInput.value) {
+                    websiteInput.focus();
+                    alert('Please enter a website URL');
+                    return;
+                }
+
+                console.log('Form submitted');
+            });
+        }
+
+        // Start Sprint button
+        const startSprintBtn = document.getElementById('start-sprint-btn');
+        if (startSprintBtn) {
+            startSprintBtn.addEventListener('click', function() {
+                console.log('Starting sprint...');
+                
+                const activeGoals = Array.from(document.querySelectorAll('.goal-card.active'))
+                    .map(card => card.getAttribute('data-goal') || card.getAttribute('data-id'));
+                
+                const formData = {
+                    websiteUrl: document.getElementById('website-url').value,
+                    businessType: document.getElementById('business-type').value,
+                    goals: activeGoals,
+                    keywords: document.getElementById('keywords').value
+                };
+
+                console.log('Sprint configuration:', formData);
+                
+                // Show loading state
+                this.textContent = 'Launching Sprint...';
+                this.disabled = true;
+                
+                // emit action event
+                const ev = new CustomEvent('sprint:action:start', { detail: { formData }});
+                window.dispatchEvent(ev);
+
+                setTimeout(() => {
+                    this.textContent = 'Start Sprint';
+                    this.disabled = false;
+                }, 2000);
+            });
+        }
+
+        // Save Draft button
+        const saveDraftBtn = document.getElementById('save-draft-btn');
+        if (saveDraftBtn) {
+            saveDraftBtn.addEventListener('click', function() {
+                console.log('Saving draft...');
+                
+                this.textContent = 'Saving...';
+                this.disabled = true;
+                
+                // emit action event
+                const ev = new CustomEvent('sprint:action:save', { detail: { timestamp: Date.now() }});
+                window.dispatchEvent(ev);
+
+                setTimeout(() => {
+                    this.textContent = 'Saved!';
+                    setTimeout(() => {
+                        this.textContent = 'Save Draft';
+                        this.disabled = false;
+                    }, 1000);
+                }, 1500);
+            });
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-nav');
+            }
+        });
+
+        document.addEventListener('mousedown', function() {
+            document.body.classList.remove('keyboard-nav');
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#' || href.length <= 1) return;
+                
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Accessibility: Announce page load for screen readers
+        window.addEventListener('load', function() {
+            const announcement = document.createElement('div');
+            announcement.setAttribute('role', 'status');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.className = 'visually-hidden';
+            announcement.textContent = 'Sprint setup page loaded';
+            document.body.appendChild(announcement);
+        });
+
+        // Auto-save draft (optional)
+        let autoSaveTimer;
+        function scheduleAutoSave() {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                console.log('Auto-saving draft...');
+            }, 5000);
+        }
+
+        if (websiteInput) {
+            websiteInput.addEventListener('input', scheduleAutoSave);
+        }
+        
+        const keywordsInput = document.getElementById('keywords');
+        if (keywordsInput) {
+            keywordsInput.addEventListener('input', scheduleAutoSave);
+        }
+    </script>
+</body>
+</html>
