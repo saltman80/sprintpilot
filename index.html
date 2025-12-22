@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SprintPilot - AI-powered command center for rapid campaign execution and optimization. Run 10-day marketing sprints with automated task management and real-time analytics.">
+    <meta name="keywords" content="sprint, marketing, AI, campaign, project management, agile, automation, analytics">
+    <title>SprintPilot - AI Marketing Sprint Platform</title>
+    <link rel="canonical" href="/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0A1628;
+            color: #FFFFFF;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Skip Link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #FF6B35;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            z-index: 100;
+            border-radius: 0 0 8px 0;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: rgba(10, 22, 40, 0.95);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #FF6B35;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            color: #FFFFFF;
+        }
+
+        .logo-text span {
+            color: #FF6B35;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-center a {
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.2s;
+            padding: 8px 0;
+        }
+
+        .nav-center a:hover,
+        .nav-center a:focus {
+            color: #FF6B35;
+            outline: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn-login {
+            background: transparent;
+            border: 2px solid #8B94A3;
+            color: #FFFFFF;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-login:hover {
+            border-color: #FF6B35;
+            color: #FF6B35;
+        }
+
+        .btn-start {
+            background: #FF6B35;
+            border: none;
+            color: #FFFFFF;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-start:hover {
+            background: #ff8052;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: 2px solid #FF6B35;
+            color: #FF6B35;
+            font-size: 24px;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 80px 24px 48px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 .highlight {
+            color: #FF6B35;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: #8B94A3;
+            max-width: 700px;
+            margin: 0 auto 48px;
+        }
+
+        /* Sprint Timeline Card */
+        .timeline-card {
+            background: linear-gradient(135deg, #2D3F5F 0%, #1a2942 100%);
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 900px;
+            margin: 0 auto 48px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .timeline-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .timeline-icons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            gap: 8px;
+        }
+
+        .timeline-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #8B94A3;
+        }
+
+        .timeline-track {
+            position: relative;
+            height: 20px;
+            background: #1a2942;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .timeline-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #FF6B35 0%, #ff8052 100%);
+            width: 30%;
+            display: flex;
+            align-items: center;
+            border-radius: 10px;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            background: #FF6B35;
+            border: 4px solid #2D3F5F;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.6);
+        }
+
+        .timeline-days {
+            display: flex;
+            justify-content: space-between;
+            gap: 4px;
+        }
+
+        .timeline-day {
+            flex: 1;
+            text-align: center;
+        }
+
+        .timeline-day-label {
+            font-size: 12px;
+            color: #8B94A3;
+            margin-bottom: 4px;
+        }
+
+        .timeline-day-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #FFFFFF;
+        }
+
+        .timeline-cta {
+            margin-top: 32px;
+            text-align: center;
+        }
+
+        .btn-timeline-cta {
+            background: #FF6B35;
+            border: none;
+            color: #FFFFFF;
+            padding: 16px 48px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .btn-timeline-cta:hover {
+            background: #ff8052;
+            box-shadow: 0 8px 32px rgba(255, 107, 53, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 48px 24px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .metric-card {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #FF6B35;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(255, 107, 53, 0.3);
+        }
+
+        .metric-header {
+            font-size: 14px;
+            color: #8B94A3;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .metric-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: #FF6B35;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .metric-badge {
+            font-size: 14px;
+            background: rgba(255, 107, 53, 0.2);
+            padding: 4px 12px;
+            border-radius: 12px;
+            color: #FF6B35;
+            font-weight: 600;
+        }
+
+        .metric-subtitle {
+            font-size: 13px;
+            color: #8B94A3;
+        }
+
+        .metric-visual {
+            margin-top: 12px;
+            height: 40px;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .metric-bar {
+            flex: 1;
+            background: #FF6B35;
+            border-radius: 4px 4px 0 0;
+            opacity: 0.6;
+            transition: all 0.3s;
+        }
+
+        .metric-card:hover .metric-bar {
+            opacity: 1;
+        }
+
+        .metric-gauge {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            margin: 12px auto 0;
+        }
+
+        .gauge-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(#FF6B35 0% 92%, #3d5170 92% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gauge-inner {
+            width: 60px;
+            height: 60px;
+            background: #2D3F5F;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* Feature Sections */
+        .feature-section {
+            max-width: 1400px;
+            margin: 48px auto;
+            padding: 0 24px;
+        }
+
+        .feature-card {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 48px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .feature-content h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .feature-content h3 {
+            font-size: 16px;
+            color: #FF6B35;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .feature-content p {
+            font-size: 16px;
+            color: #8B94A3;
+            line-height: 1.8;
+        }
+
+        .feature-visual {
+            background: #1a2942;
+            border-radius: 12px;
+            padding: 32px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* AI Content Generation Visual */
+        .content-gen-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .content-tab {
+            background: #2D3F5F;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #8B94A3;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .content-tab.active {
+            background: #FF6B35;
+            color: #FFFFFF;
+        }
+
+        .content-input {
+            background: #2D3F5F;
+            border: 1px solid #3d5170;
+            border-radius: 8px;
+            padding: 12px;
+            color: #8B94A3;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .content-output {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-radius: 8px;
+            padding: 16px;
+            color: #FFFFFF;
+            font-size: 13px;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .content-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .content-action-box {
+            background: #2D3F5F;
+            border: 1px solid #3d5170;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 12px;
+            color: #8B94A3;
+            min-height: 60px;
+        }
+
+        .generate-btn-inline {
+            background: #FF6B35;
+            border: none;
+            color: #FFFFFF;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            float: right;
+            margin-top: -4px;
+        }
+
+        /* Analytics Visual */
+        .analytics-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .analytics-chart {
+            background: #2D3F5F;
+            border-radius: 8px;
+            padding: 16px;
+            height: 180px;
+            position: relative;
+        }
+
+        .chart-lines {
+            display: flex;
+            align-items: flex-end;
+            height: 100%;
+            gap: 8px;
+        }
+
+        .chart-line {
+            flex: 1;
+            background: linear-gradient(180deg, #FF6B35 0%, #ff8052 100%);
+            border-radius: 4px 4px 0 0;
+            opacity: 0.8;
+        }
+
+        .analytics-heatmap {
+            background: #2D3F5F;
+            border-radius: 8px;
+            padding: 16px;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .heatmap-cell {
+            aspect-ratio: 1;
+            border-radius: 4px;
+            background: #1a2942;
+        }
+
+        .heatmap-cell.active {
+            background: #FF6B35;
+        }
+
+        .analytics-table {
+            background: #2D3F5F;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #3d5170;
+            font-size: 13px;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-header {
+            color: #8B94A3;
+            font-weight: 600;
+        }
+
+        /* Workflow Visual */
+        .workflow-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .workflow-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .workflow-tab {
+            background: #2D3F5F;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #8B94A3;
+            flex: 1;
+            text-align: center;
+        }
+
+        .workflow-tab.active {
+            background: #FF6B35;
+            color: #FFFFFF;
+        }
+
+        .workflow-board {
+            display: flex;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .workflow-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .workflow-task {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 12px;
+            min-height: 60px;
+        }
+
+        .workflow-badge {
+            background: rgba(0, 217, 165, 0.2);
+            color: #00D9A5;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        /* Footer */
+        footer {
+            background: #0A1628;
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
+            padding: 48px 24px 24px;
+            margin-top: 64px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 32px;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .footer-brand .logo {
+            font-size: 20px;
+        }
+
+        .footer-description {
+            color: #8B94A3;
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-link {
+            width: 36px;
+            height: 36px;
+            background: #2D3F5F;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            transition: all 0.2s;
+            font-size: 18px;
+        }
+
+        .social-link:hover {
+            background: #FF6B35;
+        }
+
+        .footer-section h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            color: #8B94A3;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #FF6B35;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
+            text-align: center;
+            color: #8B94A3;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .feature-card {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .nav-center,
+            .nav-actions {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #0A1628;
+                flex-direction: column;
+                padding: 24px;
+                border-top: 1px solid rgba(255, 107, 53, 0.2);
+            }
+
+            .nav-center.active,
+            .nav-actions.active {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-days {
+                flex-wrap: wrap;
+            }
+
+            .timeline-day {
+                min-width: 60px;
+            }
+
+            .feature-card {
+                padding: 24px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .timeline-icons {
+                overflow-x: auto;
+                padding-bottom: 8px;
+            }
+        }
+
+        /* Accessibility */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        *:focus {
+            outline: 2px solid #FF6B35;
+            outline-offset: 2px;
+        }
+
+        button:focus,
+        a:focus,
+        input:focus,
+        textarea:focus {
+            outline: 2px solid #FF6B35;
+            outline-offset: 2px;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(255, 107, 53, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(255, 107, 53, 0.8);
+            }
+        }
+
+        .timeline-marker {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body data-page="index">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header role="banner">
+        <nav role="navigation" aria-label="Main navigation" data-component="top-nav">
+            <a href="index.html" class="logo" aria-label="SprintPilot home" data-nav="home">
+                <div class="logo-icon">S</div>
+                <span class="logo-text">Sprint<span>Pilot</span></span>
+            </a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+                ?
+            </button>
+            <ul class="nav-center" id="nav-menu">
+                <li><a href="#features" data-nav="features">Features</a></li>
+                <li><a href="#pricing" data-nav="pricing">Pricing</a></li>
+                <li><a href="#resources" data-nav="resources">Resources</a></li>
+                <li><a href="#enterprise" data-nav="enterprise">Enterprise</a></li>
+            </ul>
+            <div class="nav-actions" id="nav-actions">
+                <button class="btn-login" data-nav="login">Login</button>
+                <button class="btn-start" data-nav="start">Start Sprint</button>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content" role="main">
+        <section class="hero">
+            <h1>Run a <span class="highlight">10 Day</span> Marketing <span class="highlight">Sprint</span></h1>
+            <p class="hero-subtitle">AI-powered command center for rapid campaign execution and optimization</p>
+
+            <div class="timeline-card">
+                <div class="timeline-header">Sprint Timeline</div>
+                <div class="timeline-icons">
+                    <div class="timeline-icon" aria-label="Strategy">??</div>
+                    <div class="timeline-icon" aria-label="Content">?</div>
+                    <div class="timeline-icon" aria-label="Launch">?</div>
+                    <div class="timeline-icon" aria-label="Optimize">?</div>
+                    <div class="timeline-icon" aria-label="Activation">?</div>
+                    <div class="timeline-icon" aria-label="Lonely">??</div>
+                    <div class="timeline-icon" aria-label="Innovation">?</div>
+                    <div class="timeline-icon" aria-label="Fundie">?</div>
+                    <div class="timeline-icon" aria-label="Optimising">?</div>
+                    <div class="timeline-icon" aria-label="Launch">?</div>
+                </div>
+                <div class="timeline-track">
+                    <div class="timeline-progress">
+                        <div class="timeline-marker"></div>
+                    </div>
+                </div>
+                <div class="timeline-days">
+                    <div class="timeline-day">
+                        <div class="timeline-day-label">Day 1:</div>
+                        <div class="timeline-day-name">Strategy</div>
+                    </div>
+                    <div class="timeline-day">
+                        <div class="timeline-day-label">Day 2:</div>
+                        <div class="timeline-day-name">Content</div>
+                    </div>
+                    <div class="timeline-day">
+                        <div class="timeline-day-label">Day 3:</div>
+                        <div class="timeline-day-name">Launch</div>
+                    </div>
+                    <div class="timeline-day">
+                        <div class="timeline-day-label">Day 4:</div>
+                        <div class="timeline-day-name">Optimize</div>
+                    </div>
+                    <div class="timeline-day">
+                        <div class="timeline-day-label">Day 5:</div>
+                        <div class="timeline-day-name">Activation</div>
+                    </div>
+                    <div class="timeline-day">
+                        <div class="timeline-day-label">Day 6:</div>
+                        <div class="timeline-day-name">Lonely</div>
+                    </div>
+                    <div class="timeline-day">
+                        <div class="timeline-day-label">Day 7:</div>
+                        <div class="timeline-day-name">Innovation</div>
+                    </div>
+                    <div class="timeline-day">
+                        <div class="timeline-day-label">Day 8:</div>
+                        <div class="timeline-day-name">Fundie</div>
+                    </div>
+                    <div class="timeline-day">
+                        <div class="timeline-day-label">Day 9:</div>
+                        <div class="timeline-day-name">Optimising</div>
+                    </div>
+                    <div class="timeline-day">
+                        <div class="timeline-day-label">Day 10:</div>
+                        <div class="timeline-day-name">Launch</div>
+                    </div>
+                </div>
+                <div class="timeline-cta">
+                    <button class="btn-timeline-cta">Start Your 10-Day Sprint Now</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="metrics-grid" aria-label="Sprint metrics">
+            <article class="metric-card">
+                <div class="metric-header">Active Sprints</div>
+                <div class="metric-value">
+                    3
+                    <svg data-svg="sparkline" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                        <polyline points="17 6 23 6 23 12"></polyline>
+                    </svg>
+                </div>
+                <div class="metric-subtitle">Currently Running</div>
+                <div class="metric-visual">
+                    <div class="metric-bar" style="height: 60%;"></div>
+                    <div class="metric-bar" style="height: 40%;"></div>
+                    <div class="metric-bar" style="height: 80%;"></div>
+                    <div class="metric-bar" style="height: 55%;"></div>
+                    <div class="metric-bar" style="height: 70%;"></div>
+                    <div class="metric-bar" style="height: 45%;"></div>
+                    <div class="metric-bar" style="height: 90%;"></div>
+                </div>
+            </article>
+
+            <article class="metric-card">
+                <div class="metric-header">AI Tasks Completed</div>
+                <div class="metric-value">
+                    1,250+
+                    <span class="metric-badge">85%</span>
+                </div>
+                <div class="metric-subtitle">Last 24 Hours</div>
+            </article>
+
+            <article class="metric-card">
+                <div class="metric-header">Campaign ROI</div>
+                <div class="metric-value">+145%</div>
+                <div class="metric-subtitle">Average across sprints</div>
+                <div class="metric-visual">
+                    <div class="metric-bar" style="height: 30%;"></div>
+                    <div class="metric-bar" style="height: 50%;"></div>
+                    <div class="metric-bar" style="height: 45%;"></div>
+                    <div class="metric-bar" style="height: 70%;"></div>
+                    <div class="metric-bar" style="height: 85%;"></div>
+                    <div class="metric-bar" style="height: 90%;"></div>
+                    <div class="metric-bar" style="height: 100%;"></div>
+                </div>
+            </article>
+
+            <article class="metric-card">
+                <div class="metric-header">Team Velocity</div>
+                <div class="metric-value">92%</div>
+                <div class="metric-subtitle">On Track</div>
+                <div class="metric-gauge">
+                    <div class="gauge-circle">
+                        <div class="gauge-inner">92%</div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section class="feature-section" id="features">
+            <article class="feature-card">
+                <div class="feature-content">
+                    <h3>AI Content Generation</h3>
+                    <h2>Instant Creative Assets</h2>
+                    <p>Generate ad copy, social posts, and email sequences in seconds with AI.</p>
+                </div>
+                <div class="feature-visual">
+                    <div class="content-gen-tabs">
+                        <div class="content-tab active">Ad Copy</div>
+                        <div class="content-tab">Social</div>
+                        <div class="content-tab">Email</div>
+                    </div>
+                    <div class="content-input">
+                        Enter campaign topic...
+                        <button class="generate-btn-inline">Generate</button>
+                    </div>
+                    <div class="content-output">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    </div>
+                    <div class="content-actions">
+                        <div class="content-action-box"></div>
+                        <div class="content-action-box"></div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-visual">
+                    <div class="analytics-visual">
+                        <div class="analytics-chart">
+                            <div class="chart-lines">
+                                <div class="chart-line" style="height: 40%;"></div>
+                                <div class="chart-line" style="height: 65%;"></div>
+                                <div class="chart-line" style="height: 55%;"></div>
+                                <div class="chart-line" style="height: 80%;"></div>
+                                <div class="chart-line" style="height: 70%;"></div>
+                                <div class="chart-line" style="height: 90%;"></div>
+                                <div class="chart-line" style="height: 75%;"></div>
+                                <div class="chart-line" style="height: 85%;"></div>
+                            </div>
+                        </div>
+                        <div class="analytics-heatmap">
+                            <div class="heatmap-cell"></div>
+                            <div class="heatmap-cell active"></div>
+                            <div class="heatmap-cell active"></div>
+                            <div class="heatmap-cell"></div>
+                            <div class="heatmap-cell active"></div>
+                            <div class="heatmap-cell active"></div>
+                            <div class="heatmap-cell active"></div>
+                            <div class="heatmap-cell active"></div>
+                            <div class="heatmap-cell"></div>
+                            <div class="heatmap-cell active"></div>
+                            <div class="heatmap-cell"></div>
+                            <div class="heatmap-cell active"></div>
+                            <div class="heatmap-cell active"></div>
+                            <div class="heatmap-cell"></div>
+                        </div>
+                        <div class="analytics-table">
+                            <div class="table-row table-header">
+                                <div>Channel</div>
+                                <div>Impressions</div>
+                                <div>Clicks</div>
+                                <div>Conv</div>
+                                <div>ROI</div>
+                            </div>
+                            <div class="table-row">
+                                <div>Google Ads</div>
+                                <div>18,300</div>
+                                <div>8,254</div>
+                                <div>3,841</div>
+                                <div>145%</div>
+                            </div>
+                            <div class="table-row">
+                                <div>Meta</div>
+                                <div>18,276</div>
+                                <div>8,254</div>
+                                <div>3,841</div>
+                                <div>132%</div>
+                            </div>
+                            <div class="table-row">
+                                <div>LinkedIn</div>
+                                <div>9,124</div>
+                                <div>3,384</div>
+                                <div>1,593</div>
+                                <div>98%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <h3>Real-time Analytics Command</h3>
+                    <h2>Live Performance Tracking</h2>
+                    <p>Monitor campaign metrics across all channels in a single, unified dashboard.</p>
+                </div>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-content">
+                    <h3>Automated Workflow Optimization</h3>
+                    <h2>Smart Task Management</h2>
+                    <p>AI identifies bottlenecks and automatically reallocates resources for maximum efficiency.</p>
+                </div>
+                <div class="feature-visual">
+                    <div class="workflow-visual">
+                        <div class="workflow-tabs">
+                            <div class="workflow-tab">To Do</div>
+                            <div class="workflow-tab active">In Progress</div>
+                            <div class="workflow-tab">Completed</div>
+                        </div>
+                        <div class="workflow-board">
+                            <div class="workflow-column">
+                                <div class="workflow-task">
+                                    Design Homepage
+                                    <div class="workflow-badge">? AI Optimization Active</div>
+                                </div>
+                                <div class="workflow-task">
+                                    API Development
+                                </div>
+                            </div>
+                            <div class="workflow-column">
+                                <div class="workflow-task">
+                                    Social Copy
+                                    <div class="workflow-badge">? AI Optimization Active</div>
+                                </div>
+                            </div>
+                            <div class="workflow-column">
+                                <div class="workflow-task">
+                                    Project Setup
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="index.html" class="logo" aria-label="SprintPilot home" data-nav="home">
+                    <div class="logo-icon">S</div>
+                    <span class="logo-text">Sprint<span>Pilot</span></span>
+                </a>
+                <p class="footer-description">SprintPilot is a AI-command center for rapid campaign execution and optimz with AI.</p>
+                <div class="footer-social">
+                    <a href="#" class="social-link" aria-label="Twitter">?</a>
+                    <a href="#" class="social-link" aria-label="LinkedIn">in</a>
+                    <a href="#" class="social-link" aria-label="GitHub">?</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Product</h4>
+                <nav class="footer-links" aria-label="Product links">
+                    <a href="#features">Features</a>
+                    <a href="#roadmap">Roadmap</a>
+                    <a href="#changelog">Changelog</a>
+                </nav>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <nav class="footer-links" aria-label="Company links">
+                    <a href="#about">About</a>
+                    <a href="#careers">Careers</a>
+                    <a href="#contact">Contact</a>
+                </nav>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <nav class="footer-links" aria-label="Resources links">
+                    <a href="#blog">Blog</a>
+                    <a href="#guides">Guides</a>
+                    <a href="#support">Support</a>
+                </nav>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <nav class="footer-links" aria-label="Legal links">
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Service</a>
+                </nav>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 SprintPilot Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Toast root required by SprintPilot.notify and other runtime code -->
+    <div data-component="toast-root" aria-live="polite" aria-atomic="true" style="position:fixed;bottom:24px;right:24px;z-index:1000;"></div>
+
+    <script>
+        // Mobile menu toggle
+        (function() {
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            const navCenter = document.querySelector('.nav-center');
+            const navActions = document.querySelector('.nav-actions');
+
+            if (toggle && navCenter && navActions) {
+                toggle.addEventListener('click', function() {
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    this.setAttribute('aria-expanded', String(!isExpanded));
+                    navCenter.classList.toggle('active');
+                    navActions.classList.toggle('active');
+                });
+
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && navCenter.classList.contains('active')) {
+                        toggle.setAttribute('aria-expanded', 'false');
+                        navCenter.classList.remove('active');
+                        navActions.classList.remove('active');
+                        try { toggle.focus(); } catch (err) {}
+                    }
+                });
+            }
+        })();
+
+        // Smooth scroll for anchor links (also close mobile menu when a nav link is clicked)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#' || href.length <= 1) return;
+
+                const target = document.querySelector(href);
+                // Close mobile nav if open and the clicked anchor is inside the nav
+                const navCenter = document.querySelector('.nav-center');
+                const toggle = document.querySelector('.mobile-menu-toggle');
+                if (navCenter && navCenter.contains(this) && navCenter.classList.contains('active')) {
+                    navCenter.classList.remove('active');
+                    const navActions = document.querySelector('.nav-actions');
+                    if (navActions) navActions.classList.remove('active');
+                    if (toggle) toggle.setAttribute('aria-expanded', 'false');
+                }
+
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // update URL hash without jumping (pushState preserves history)
+                    try {
+                        history.pushState(null, '', href);
+                        // re-run highlight to reflect hash change immediately
+                        runNavHighlight();
+                    } catch (err) {}
+                }
+            });
+        });
+
+        // Button interactions
+        document.querySelectorAll('.btn-start, .btn-timeline-cta').forEach(btn => {
+            btn.addEventListener('click', function() {
+                console.log('Starting sprint...');
+                // Add your sprint initialization logic here
+            });
+        });
+
+        document.querySelectorAll('.btn-login').forEach(btn => {
+            btn.addEventListener('click', function() {
+                console.log('Opening login...');
+                // Add your login logic here
+            });
+        });
+
+        // Tab interactions for content generation
+        document.querySelectorAll('.content-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.content-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.workflow-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.workflow-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Generate button interaction
+        document.querySelectorAll('.generate-btn-inline').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.textContent = 'Generating...';
+                this.disabled = true;
+
+                setTimeout(() => {
+                    this.textContent = 'Generate';
+                    this.disabled = false;
+                }, 2000);
+            });
+        });
+
+        // Keyboard navigation improvements
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-nav');
+            }
+        });
+
+        document.addEventListener('mousedown', function() {
+            document.body.classList.remove('keyboard-nav');
+        });
+
+        // Accessibility: Announce page load for screen readers
+        window.addEventListener('load', function() {
+            const announcement = document.createElement('div');
+            announcement.setAttribute('role', 'status');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.className = 'visually-hidden';
+            announcement.textContent = 'SprintPilot homepage loaded';
+            document.body.appendChild(announcement);
+        });
+
+        // Active navigation highlighting
+        function runNavHighlight() {
+            const currentPath = window.location.pathname.split('/').pop() || '';
+            const currentHash = window.location.hash || '';
+            // prefer "index" detection for root
+            const isIndex = currentPath === '' || currentPath === 'index.html' || currentPath === '/';
+
+            // Clear existing aria-current and active classes first
+            document.querySelectorAll('.nav-center a').forEach(link => {
+                link.classList.remove('active');
+                link.removeAttribute('aria-current');
+            });
+
+            // Attempt to highlight by matching data-nav first
+            document.querySelectorAll('.nav-center a').forEach(link => {
+                const dataNav = link.getAttribute('data-nav') || '';
+                const href = link.getAttribute('href') || '';
+
+                // If link is an in-page anchor and hash matches, mark active
+                if (href.startsWith('#') && currentHash && href === currentHash) {
+                    link.classList.add('active');
+                    link.setAttribute('aria-current', 'page');
+                    return;
+                }
+
+                // If current page is index/root, prefer not marking anchors unless hash matches.
+                // Otherwise, mark by comparing data-nav if possible.
+                if (!href.startsWith('#') && dataNav) {
+                    // If path has a segment matching the dataNav (fallback), mark it
+                    const normalizedPath = (window.location.pathname || '').replace(/\/+$/, '');
+                    if (normalizedPath.endsWith('/' + dataNav) || (isIndex && dataNav === 'home' && (currentHash === '' || currentHash === '#features' || currentHash === '#pricing' || currentHash === '#resources' || currentHash === '#enterprise'))) {
+                        link.classList.add('active');
+                        link.setAttribute('aria-current', 'page');
+                    }
+                }
+            });
+
+            // Ensure the brand/home link is marked active on the index/root page
+            const brandHome = document.querySelector('a[data-nav="home"]');
+            if (isIndex && brandHome) {
+                brandHome.classList.add('active');
+                brandHome.setAttribute('aria-current', 'page');
+            }
+        }
+
+        // initial highlight run
+        runNavHighlight();
+        // update highlights when hash changes (e.g., clicking in-page anchors)
+        window.addEventListener('hashchange', runNavHighlight);
+        // also update when navigating history (popstate)
+        window.addEventListener('popstate', runNavHighlight);
+    </script>
+</body>
+</html>
