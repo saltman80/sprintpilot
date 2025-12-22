@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SprintPilot Sprint Calendar - Manage your agile sprints with powerful visual tools">
+    <title>Sprint Calendar - SprintPilot</title>
+    <link rel="canonical" href="https://sprintpilot.com/calendar">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #0A1628;
+            color: #FFFFFF;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: rgba(10, 22, 40, 0.95);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            color: #FFFFFF;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8F35 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .logo-text span {
+            color: #FF6B35;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-menu a:hover {
+            color: #FF6B35;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-login {
+            background: transparent;
+            border: 2px solid #8B94A3;
+            color: #FFFFFF;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-login:hover {
+            border-color: #FF6B35;
+            color: #FF6B35;
+        }
+
+        .btn-primary {
+            background: #FF6B35;
+            border: none;
+            color: #FFFFFF;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background: #FF8F35;
+            box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Sprint Calendar Section */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .calendar-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .sprint-status-badge {
+            background: #FF6B35;
+            color: #FFFFFF;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+
+        .day-card {
+            background: #2D3F5F;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 20px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .day-card:hover {
+            border-color: #FF6B35;
+            transform: translateY(-2px);
+        }
+
+        .day-card.active {
+            background: #FF6B35;
+            border-color: #FF6B35;
+        }
+
+        .day-label {
+            font-size: 12px;
+            color: #8B94A3;
+            margin-bottom: 4px;
+        }
+
+        .day-card.active .day-label {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .day-number {
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .day-dots {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: #FF6B35;
+            border-radius: 50%;
+        }
+
+        .day-card.active .dot {
+            background: #FFFFFF;
+        }
+
+        /* Sprint Board Section */
+        .board-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            margin-top: 48px;
+        }
+
+        .board-header h2 {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .btn-stronatone {
+            background: #FF6B35;
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .board-controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #FFFFFF;
+        }
+
+        .filter-select {
+            background: #2D3F5F;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            color: #FFFFFF;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .search-box {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: #2D3F5F;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            color: #FFFFFF;
+            padding: 10px 16px 10px 40px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .search-box::before {
+            content: '?';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+        }
+
+        .board-layout {
+            display: grid;
+            grid-template-columns: 1fr 200px;
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .board-columns {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            background: #1a2738;
+            padding: 24px;
+            border-radius: 16px;
+            border: 2px solid #FF6B35;
+        }
+
+        .board-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .column-header {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .task-card {
+            background: #2D3F5F;
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: grab;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .task-card:hover {
+            border-color: #FF6B35;
+            transform: translateY(-2px);
+        }
+
+        .task-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 107, 53, 0.2);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .task-type {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .task-points {
+            font-size: 12px;
+            color: #8B94A3;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .task-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-in-progress {
+            background: rgba(255, 152, 0, 0.2);
+            color: #FF9800;
+        }
+
+        .status-done {
+            background: rgba(0, 217, 165, 0.2);
+            color: #00D9A5;
+        }
+
+        .task-menu {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            color: #8B94A3;
+            cursor: pointer;
+        }
+
+        .auto-assets {
+            background: #1a2738;
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 24px;
+            height: fit-content;
+        }
+
+        .auto-assets h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .asset-count {
+            font-size: 12px;
+            color: #8B94A3;
+            margin-bottom: 16px;
+        }
+
+        .asset-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .asset-icon {
+            background: #2D3F5F;
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .asset-icon:hover {
+            border-color: #FF6B35;
+            transform: scale(1.05);
+        }
+
+        /* Charts Section */
+        .chart-container {
+            background: #1a2738;
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .chart-container h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .burndown-chart {
+            width: 100%;
+            height: 200px;
+            position: relative;
+        }
+
+        .burndown-chart canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .momentum-meter {
+            height: 80px;
+            position: relative;
+            margin-top: 16px;
+        }
+
+        .meter-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 107, 53, 0.2);
+            border-radius: 4px;
+            position: relative;
+            margin: 24px 0;
+        }
+
+        .meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FF6B35 0%, #FF8F35 100%);
+            border-radius: 4px;
+            width: 60%;
+            position: relative;
+        }
+
+        .meter-handle {
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background: #FFFFFF;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .meter-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #8B94A3;
+        }
+
+        /* Recent Activity */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8F35 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .activity-title span {
+            color: #FF6B35;
+        }
+
+        .activity-meta {
+            font-size: 13px;
+            color: #8B94A3;
+        }
+
+        /* Footer */
+        footer {
+            background: #0A1628;
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
+            padding: 24px;
+            margin-top: 64px;
+            text-align: center;
+        }
+
+        footer p {
+            color: #8B94A3;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .calendar-days {
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            .board-columns {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .calendar-days {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .board-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .board-columns {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .asset-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #FF6B35;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Minimal visual around drag target */
+        .board-column.drag-over {
+            outline: 2px dashed rgba(255, 107, 53, 0.5);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body data-page="calendar">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header role="banner">
+        <nav role="navigation" aria-label="Main navigation" data-component="top-nav">
+            <a href="index.html" class="logo" aria-label="SprintPilot Home">
+                <div class="logo-icon">S</div>
+                <div class="logo-text">Sprint<span>Pilot</span></div>
+            </a>
+            
+            <ul id="nav-menu" class="nav-menu">
+                <li><a href="index.html" data-nav="home">Home</a></li>
+                <li><a href="setup.html" data-nav="setup">Services</a></li>
+                <li><a href="daily.html" data-nav="daily">About</a></li>
+                <li><a href="coach.html" data-nav="coach">Contact</a></li>
+                <li><a href="calendar.html" aria-current="page" data-nav="calendar" data-nav-active>Calendar</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <a href="/login" class="btn-login">Login</a>
+                <a href="/start-sprint" class="btn-primary">Start Sprint</a>
+            </div>
+
+            <button class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation menu">
+                ?
+            </button>
+        </nav>
+    </header>
+
+    <main role="main" data-region="content" id="main-content">
+        <!-- Sprint Calendar Section -->
+        <section aria-labelledby="calendar-heading">
+            <div class="calendar-header">
+                <h1 id="calendar-heading">Sprint Calendar</h1>
+                <div class="sprint-status-badge" role="status" aria-live="polite">
+                    <span>Sprint Status:</span>
+                    <strong>Day 5/10</strong>
+                </div>
+            </div>
+
+            <div class="calendar-days" role="list" aria-label="Sprint days" data-component="calendar-strip">
+                <div class="day-card" role="listitem" tabindex="0" data-day="1" data-day-index="1">
+                    <div class="day-label">Day</div>
+                    <div class="day-number">1</div>
+                    <div class="day-dots" aria-hidden="true">
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
+                <div class="day-card" role="listitem" tabindex="0" data-day="2" data-day-index="2">
+                    <div class="day-label">Day</div>
+                    <div class="day-number">2</div>
+                    <div class="day-dots" aria-hidden="true">
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
+                <div class="day-card" role="listitem" tabindex="0" data-day="3" data-day-index="3">
+                    <div class="day-label">Day</div>
+                    <div class="day-number">3</div>
+                    <div class="day-dots" aria-hidden="true">
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
+                <div class="day-card" role="listitem" tabindex="0" data-day="4" data-day-index="4">
+                    <div class="day-label">Day</div>
+                    <div class="day-number">4</div>
+                    <div class="day-dots" aria-hidden="true">
+                        <span class="dot"></span>
+                    </div>
+                </div>
+                <div class="day-card active" role="listitem" tabindex="0" data-day="5" data-day-index="5" aria-current="date" aria-pressed="true">
+                    <div class="day-label">Day</div>
+                    <div class="day-number">5</div>
+                    <div class="day-dots" aria-hidden="true">
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
+                <div class="day-card" role="listitem" tabindex="0" data-day="6" data-day-index="6">
+                    <div class="day-label">Day</div>
+                    <div class="day-number">6</div>
+                    <div class="day-dots" aria-hidden="true">
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
+                <div class="day-card" role="listitem" tabindex="0" data-day="7" data-day-index="7">
+                    <div class="day-label">Day</div>
+                    <div class="day-number">7</div>
+                    <div class="day-dots" aria-hidden="true">
+                        <span class="dot"></span>
+                    </div>
+                </div>
+                <div class="day-card" role="listitem" tabindex="0" data-day="8" data-day-index="8">
+                    <div class="day-label">Day</div>
+                    <div class="day-number">8</div>
+                    <div class="day-dots" aria-hidden="true">
+                        <span class="dot"></span>
+                    </div>
+                </div>
+                <div class="day-card" role="listitem" tabindex="0" data-day="9" data-day-index="9">
+                    <div class="day-label">Day</div>
+                    <div class="day-number">9</div>
+                    <div class="day-dots" aria-hidden="true">
+                        <span class="dot"></span>
+                    </div>
+                </div>
+                <div class="day-card" role="listitem" tabindex="0" data-day="10" data-day-index="10">
+                    <div class="day-label">Day</div>
+                    <div class="day-number">10</div>
+                    <div class="day-dots" aria-hidden="true">
+                        <span class="dot"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sprint Board Section -->
+        <section aria-labelledby="board-heading">
+            <div class="board-header">
+                <h2 id="board-heading">Sprint Board</h2>
+                <button class="btn-stronatone" aria-label="Stronatone options">
+                    Stronatone <span aria-hidden="true">?</span>
+                </button>
+            </div>
+
+            <div class="board-controls" role="group" aria-label="Board filters and search">
+                <div class="filter-group">
+                    <label for="filter-all" class="filter-label">Filter:</label>
+                    <select id="filter-all" class="filter-select" aria-label="Filter by stories">
+                        <option>All Stories</option>
+                        <option>My Stories</option>
+                        <option>Unassigned</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <select id="filter-penruss" class="filter-select" aria-label="Filter by Penruss">
+                        <option>Penruss</option>
+                        <option>Design</option>
+                        <option>Development</option>
+                        <option>Marketing</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <select id="filter-time" class="filter-select" aria-label="Filter by time">
+                        <option>All Time</option>
+                        <option>This Sprint</option>
+                        <option>Last Sprint</option>
+                    </select>
+                </div>
+                <div class="search-box">
+                    <input type="search" placeholder="Search..." aria-label="Search tasks">
+                </div>
+            </div>
+
+            <div class="board-layout">
+                <div class="board-columns" role="region" aria-label="Sprint board">
+                    <!-- Day 1 Column -->
+                    <div class="board-column">
+                        <h3 class="column-header">Day 1</h3>
+                        <div class="task-card" data-component="task-card" data-task-id="t-001" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Design</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-002" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Dev</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-003" data-task-status="done" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Dev</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-done">Done</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-004" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Design</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-005" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Marketing</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                    </div>
+
+                    <!-- Day 2 Column -->
+                    <div class="board-column">
+                        <h3 class="column-header">Day 2</h3>
+                        <div class="task-card" data-component="task-card" data-task-id="t-006" data-task-status="done" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Dev</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-done">Done</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-007" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Dev</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-008" data-task-status="done" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Dev</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-done">Done</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-009" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Marketing</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-010" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Design</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                    </div>
+
+                    <!-- Day 3 Column -->
+                    <div class="board-column">
+                        <h3 class="column-header">Day 3</h3>
+                        <div class="task-card" data-component="task-card" data-task-id="t-011" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">??</div>
+                            <div class="task-type">Design</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-012" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Design</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-013" data-task-status="done" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Dev</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-done">Done</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-014" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Design</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-015" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Marketing</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                    </div>
+
+                    <!-- Day 4 Column -->
+                    <div class="board-column">
+                        <h3 class="column-header">Day 4</h3>
+                        <div class="task-card" data-component="task-card" data-task-id="t-016" data-task-status="done" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Dev</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-done">Done</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-017" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Design</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-018" data-task-status="done" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Dev</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-done">Done</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-019" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Design</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-020" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">??</div>
+                            <div class="task-type">Design</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                    </div>
+
+                    <!-- Day 5 Column -->
+                    <div class="board-column">
+                        <h3 class="column-header">Day 5</h3>
+                        <div class="task-card" data-component="task-card" data-task-id="t-021" data-task-status="done" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Marketing</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-done">Done</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-022" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Design</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-023" data-task-status="done" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Marketing</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-done">Done</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-024" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Marketing</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                        <div class="task-card" data-component="task-card" data-task-id="t-025" data-task-status="in-progress" draggable="true" role="article" tabindex="0">
+                            <span class="task-menu" aria-label="Task menu">?</span>
+                            <div class="task-icon">?</div>
+                            <div class="task-type">Design</div>
+                            <div class="task-points">
+                                <span>3 pts</span>
+                                <span>3 pts</span>
+                            </div>
+                            <span class="task-status status-in-progress">In Progress</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Auto-Generated Assets Sidebar -->
+                <aside class="auto-assets" aria-labelledby="assets-heading">
+                    <h3 id="assets-heading">Auto-Generated<br>Assets: 15</h3>
+                    <div class="asset-grid" role="list" aria-label="Generated assets">
+                        <div class="asset-icon" role="listitem" tabindex="0" aria-label="Grid asset">?</div>
+                        <div class="asset-icon" role="listitem" tabindex="0" aria-label="Document asset">?</div>
+                        <div class="asset-icon" role="listitem" tabindex="0" aria-label="File asset">?</div>
+                        <div class="asset-icon" role="listitem" tabindex="0" aria-label="Document stack asset">?</div>
+                        <div class="asset-icon" role="listitem" tabindex="0" aria-label="Brush asset">?</div>
+                        <div class="asset-icon" role="listitem" tabindex="0" aria-label="Tools asset">?</div>
+                        <div class="asset-icon" role="listitem" tabindex="0" aria-label="Paint asset">?</div>
+                        <div class="asset-icon" role="listitem" tabindex="0" aria-label="Image asset">?</div>
+                        <div class="asset-icon" role="listitem" tabindex="0" aria-label="Chart asset">?</div>
+                        <div class="asset-icon" role="listitem" tabindex="0" aria-label="Graph asset">?</div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- Burndown Chart -->
+        <section class="chart-container" aria-labelledby="burndown-heading">
+            <h3 id="burndown-heading">Burndown chart</h3>
+            <div class="burndown-chart">
+                <canvas id="burndownCanvas" role="img" aria-label="Burndown chart showing sprint progress from January to November"></canvas>
+            </div>
+        </section>
+
+        <!-- Momentum Meter -->
+        <section class="chart-container" aria-labelledby="momentum-heading">
+            <h3 id="momentum-heading">Momentum meter</h3>
+            <div class="momentum-meter">
+                <div class="meter-bar" role="meter" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="Sprint momentum at 60%">
+                    <div class="meter-fill">
+                        <div class="meter-handle"></div>
+                    </div>
+                </div>
+                <div class="meter-labels">
+                    <span>0</span>
+                    <span>10</span>
+                    <span>20</span>
+                    <span>30</span>
+                    <span>40</span>
+                    <span>50</span>
+                    <span>60</span>
+                    <span>70</span>
+                    <span>80</span>
+                    <span>90</span>
+                    <span>100</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Activity -->
+        <section class="chart-container" aria-labelledby="activity-heading">
+            <h3 id="activity-heading">Recent activity</h3>
+            <div class="activity-list" role="feed" aria-label="Recent sprint activities">
+                <article class="activity-item" role="article">
+                    <div class="activity-icon" aria-hidden="true">S</div>
+                    <div class="activity-content">
+                        <div class="activity-title"><span>SprintPilot</span> started</div>
+                        <div class="activity-meta">Updated SprintPilot altihej ? 9 hours ago</div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer role="contentinfo">
+        <p>&copy; 2024 SprintPilot. Accelerating agile teams worldwide.</p>
+    </footer>
+
+    <div data-component="toast-root" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="app.js" defer></script>
+    <script>
+        // Mobile menu toggle (guarded)
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const navMenu = document.querySelector('#nav-menu');
+
+        if (mobileMenuToggle && navMenu) {
+            mobileMenuToggle.addEventListener('click', () => {
+                const isExpanded = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
+                mobileMenuToggle.setAttribute('aria-expanded', String(!isExpanded));
+                // Toggle visual state rather than inline style toggles repeatedly
+                if (!isExpanded) {
+                    navMenu.style.display = 'flex';
+                    navMenu.style.flexDirection = 'column';
+                    navMenu.style.position = 'absolute';
+                    navMenu.style.top = '60px';
+                    navMenu.style.right = '24px';
+                    navMenu.style.background = '#2D3F5F';
+                    navMenu.style.padding = '16px';
+                    navMenu.style.borderRadius = '12px';
+                    navMenu.style.border = '2px solid #FF6B35';
+                } else {
+                    // revert to CSS default
+                    navMenu.style.display = '';
+                    navMenu.style.flexDirection = '';
+                    navMenu.style.position = '';
+                    navMenu.style.top = '';
+                    navMenu.style.right = '';
+                    navMenu.style.background = '';
+                    navMenu.style.padding = '';
+                    navMenu.style.borderRadius = '';
+                    navMenu.style.border = '';
+                }
+            });
+        }
+
+        // Day card selection
+        const dayCards = document.querySelectorAll('.day-card');
+        dayCards.forEach(card => {
+            card.addEventListener('click', () => {
+                dayCards.forEach(c => {
+                    c.classList.remove('active');
+                    c.removeAttribute('aria-current');
+                    c.setAttribute('aria-pressed', 'false');
+                });
+                card.classList.add('active');
+                card.setAttribute('aria-current', 'date');
+                card.setAttribute('aria-pressed', 'true');
+
+                // Emit custom event for day selection
+                const idx = card.getAttribute('data-day-index') || card.getAttribute('data-day');
+                document.dispatchEvent(new CustomEvent('sprint:day:selected', { detail: { dayIndex: idx } }));
+            });
+
+            // Use keydown for better accessibility (space/enter)
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') {
+                    e.preventDefault();
+                    card.click();
+                }
+            });
+        });
+
+        // Drag and drop for task cards
+        const taskCards = document.querySelectorAll('.task-card');
+        const boardColumns = document.querySelectorAll('.board-column');
+
+        let draggedCard = null;
+        taskCards.forEach(card => {
+            card.addEventListener('dragstart', (e) => {
+                // mark dragging element and set minimal dataTransfer payload
+                draggedCard = card;
+                e.dataTransfer.effectAllowed = 'move';
+                try {
+                    e.dataTransfer.setData('text/plain', card.getAttribute('da
