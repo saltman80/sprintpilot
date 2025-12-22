@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SprintPilot Daily Task View - Manage your daily sprint tasks, checklist, and auto-generated assets">
+    <meta name="keywords" content="sprint, daily, tasks, checklist, project management, agile">
+    <title>Daily Task View | SprintPilot</title>
+    <link rel="canonical" href="/daily.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0A1628;
+            color: #FFFFFF;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Skip Link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #FF6B35;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: rgba(10, 22, 40, 0.95);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.2s;
+            padding: 8px 0;
+        }
+
+        .nav-links a:hover,
+        .nav-links a:focus {
+            color: #FF6B35;
+            outline: none;
+        }
+
+        .nav-links a.active {
+            color: #FF6B35;
+            border-bottom: 2px solid #FF6B35;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: 2px solid #FF6B35;
+            color: #FF6B35;
+            font-size: 24px;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 32px;
+            font-size: 14px;
+            color: #8B94A3;
+        }
+
+        .breadcrumb .logo {
+            font-size: 14px;
+            color: #FF6B35;
+        }
+
+        .breadcrumb-separator {
+            color: #8B94A3;
+        }
+
+        .breadcrumb-current {
+            color: #FFFFFF;
+        }
+
+        /* Sprint Header */
+        .sprint-header {
+            margin-bottom: 24px;
+        }
+
+        .sprint-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        /* Day Selector */
+        .day-selector {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 32px;
+        }
+
+        .day-selector::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .day-selector::-webkit-scrollbar-track {
+            background: #1a2942;
+        }
+
+        .day-selector::-webkit-scrollbar-thumb {
+            background: #FF6B35;
+            border-radius: 2px;
+        }
+
+        .day-card {
+            background: #2D3F5F;
+            border: 2px solid #3d5170;
+            border-radius: 12px;
+            padding: 16px;
+            min-width: 80px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .day-card:hover {
+            border-color: #FF6B35;
+        }
+
+        .day-card.active {
+            background: #FF6B35;
+            border-color: #FF6B35;
+        }
+
+        .day-card .day-label {
+            font-size: 12px;
+            color: #8B94A3;
+            margin-bottom: 4px;
+        }
+
+        .day-card.active .day-label {
+            color: #FFFFFF;
+        }
+
+        .day-card .day-number {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .day-nav-btn {
+            background: #2D3F5F;
+            border: 2px solid #3d5170;
+            border-radius: 12px;
+            color: #FFFFFF;
+            font-size: 20px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .day-nav-btn:hover {
+            border-color: #FF6B35;
+            color: #FF6B35;
+        }
+
+        /* Main Grid Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        /* Checklist Card */
+        .checklist-card {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .card-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .card-menu-btn {
+            background: none;
+            border: none;
+            color: #8B94A3;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        /* Task Item */
+        .task-item {
+            background: #1a2942;
+            border: 1px solid #3d5170;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .task-item:hover {
+            background: #233654;
+            border-color: #FF6B35;
+        }
+
+        .task-item.completed {
+            opacity: 0.6;
+        }
+
+        .task-header-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .task-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #8B94A3;
+            border-radius: 6px;
+            cursor: pointer;
+            flex-shrink: 0;
+            appearance: none;
+            background: transparent;
+            position: relative;
+        }
+
+        .task-checkbox:checked {
+            background: #FF6B35;
+            border-color: #FF6B35;
+        }
+
+        .task-checkbox:checked::after {
+            content: '?';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .task-title {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .task-status {
+            font-size: 12px;
+            color: #FF6B35;
+            padding: 4px 12px;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 12px;
+        }
+
+        .task-toggle {
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            background: #FF6B35;
+            width: 44px;
+            height: 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .task-toggle::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: #FFFFFF;
+            border-radius: 50%;
+            top: 3px;
+            right: 3px;
+            transition: all 0.2s;
+        }
+
+        .task-toggle.off {
+            background: #3d5170;
+        }
+
+        .task-toggle.off::after {
+            right: auto;
+            left: 3px;
+        }
+
+        .task-progress {
+            width: 100%;
+            height: 6px;
+            background: #3d5170;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .task-progress-fill {
+            height: 100%;
+            background: #FF6B35;
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .task-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .task-item.expanded .task-details {
+            max-height: 500px;
+            margin-top: 16px;
+        }
+
+        .task-detail-section {
+            background: #0f1a2d;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+
+        .task-detail-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .task-detail-content {
+            font-size: 14px;
+            color: #8B94A3;
+        }
+
+        .task-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .task-link {
+            font-size: 14px;
+            color: #FF6B35;
+            text-decoration: underline;
+        }
+
+        /* Auto-Generated Assets Card */
+        .assets-card {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .asset-section {
+            margin-bottom: 24px;
+        }
+
+        .asset-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .asset-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .asset-text {
+            background: #1a2942;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #8B94A3;
+            margin-bottom: 12px;
+        }
+
+        .asset-preview {
+            background: #d4d8dd;
+            border-radius: 8px;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .asset-preview-icon {
+            font-size: 48px;
+            color: #8B94A3;
+        }
+
+        .asset-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .asset-thumbnail {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #2D3F5F 0%, #FF6B35 100%);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .asset-thumbnail:hover {
+            transform: scale(1.05);
+        }
+
+        .asset-thumbnail:nth-child(1) {
+            background: linear-gradient(135deg, #1a2942 0%, #FF6B35 100%);
+        }
+
+        .asset-thumbnail:nth-child(2) {
+            background: linear-gradient(135deg, #2D3F5F 0%, #1a2942 100%);
+        }
+
+        .asset-thumbnail:nth-child(3) {
+            background: linear-gradient(45deg, #FF6B35 0%, #2D3F5F 100%);
+        }
+
+        .asset-thumbnail:nth-child(4) {
+            background: repeating-linear-gradient(45deg, #FF6B35 0px, #FF6B35 10px, #2D3F5F 10px, #2D3F5F 20px);
+        }
+
+        .asset-thumbnail:nth-child(5) {
+            background: linear-gradient(135deg, #1a2942 0%, #2D3F5F 100%);
+        }
+
+        .asset-thumbnail:nth-child(6) {
+            background: linear-gradient(135deg, #2D3F5F 0%, #1a2942 100%);
+        }
+
+        .generate-btn {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .generate-btn:hover {
+            background: #FF6B35;
+        }
+
+        /* Notes Card */
+        .notes-card {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 120px;
+            background: #1a2942;
+            border: 1px solid #3d5170;
+            border-radius: 8px;
+            padding: 12px;
+            color: #FFFFFF;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .notes-textarea::placeholder {
+            color: #8B94A3;
+        }
+
+        /* Dependencies Card */
+        .dependencies-card {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .dependency-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .dependency-box {
+            background: #1a2942;
+            border: 1px solid #3d5170;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 14px;
+            flex: 1;
+        }
+
+        .dependency-arrow {
+            color: #8B94A3;
+            font-size: 20px;
+        }
+
+        /* Timeline Card */
+        .timeline-card {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .timeline-wrapper {
+            position: relative;
+            padding: 24px 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #3d5170;
+            transform: translateY(-50%);
+        }
+
+        .timeline-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: #FF6B35;
+            width: 60%;
+        }
+
+        .timeline-events {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .timeline-event {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 16px;
+            height: 16px;
+            background: #FF6B35;
+            border: 3px solid #2D3F5F;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-dot.future {
+            background: #3d5170;
+        }
+
+        .timeline-event-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .timeline-event-time {
+            font-size: 12px;
+            color: #8B94A3;
+        }
+
+        /* Footer */
+        footer {
+            background: #0A1628;
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
+            padding: 24px;
+            text-align: center;
+            color: #8B94A3;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #0A1628;
+                flex-direction: column;
+                padding: 24px;
+                border-top: 1px solid rgba(255, 107, 53, 0.2);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .day-selector {
+                gap: 8px;
+            }
+
+            .day-card {
+                min-width: 70px;
+                padding: 12px;
+            }
+
+            .asset-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            main {
+                padding: 24px 16px;
+            }
+        }
+
+        /* Accessibility */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Focus Styles */
+        *:focus {
+            outline: 2px solid #FF6B35;
+            outline-offset: 2px;
+        }
+
+        button:focus,
+        a:focus,
+        input:focus,
+        textarea:focus {
+            outline: 2px solid #FF6B35;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body data-page="daily">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header role="banner">
+        <nav role="navigation" aria-label="Main navigation" data-component="top-nav">
+            <a href="index.html" class="logo" aria-label="SprintPilot home" data-nav="home">SprintPilot</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu" data-component="mobile-menu-toggle">
+                ?
+            </button>
+            <ul class="nav-links" id="nav-menu">
+                <li><a href="index.html#hero" data-nav="home">Home</a></li>
+                <li><a href="services.html" data-nav="services">Services</a></li>
+                <li><a href="index.html#about" data-nav="about">About</a></li>
+                <li><a href="index.html#contact" data-nav="contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main-content" role="main">
+        <nav class="breadcrumb" role="navigation" aria-label="Breadcrumb">
+            <span class="logo">SprintPilot</span>
+            <span class="breadcrumb-separator" aria-hidden="true">?</span>
+            <span class="breadcrumb-current">Daily Task View</span>
+        </nav>
+
+        <section class="sprint-header">
+            <h1>10 Day Sprint</h1>
+        </section>
+
+        <div class="day-selector" role="tablist" aria-label="Sprint days">
+            <div class="day-card" role="tab" aria-selected="false" tabindex="0">
+                <div class="day-label">Mon</div>
+                <div class="day-number">1</div>
+            </div>
+            <div class="day-card" role="tab" aria-selected="false" tabindex="-1">
+                <div class="day-label">Tue</div>
+                <div class="day-number">2</div>
+            </div>
+            <div class="day-card" role="tab" aria-selected="false" tabindex="-1">
+                <div class="day-label">Wed</div>
+                <div class="day-number">3</div>
+            </div>
+            <div class="day-card" role="tab" aria-selected="false" tabindex="-1">
+                <div class="day-label">Thu</div>
+                <div class="day-number">4</div>
+            </div>
+            <div class="day-card active" role="tab" aria-selected="true" tabindex="-1">
+                <div class="day-label">Day</div>
+                <div class="day-number">5</div>
+            </div>
+            <div class="day-card" role="tab" aria-selected="false" tabindex="-1">
+                <div class="day-label">Sun</div>
+                <div class="day-number">6</div>
+            </div>
+            <div class="day-card" role="tab" aria-selected="false" tabindex="-1">
+                <div class="day-label">Mon</div>
+                <div class="day-number">7</div>
+            </div>
+            <div class="day-card" role="tab" aria-selected="false" tabindex="-1">
+                <div class="day-label">Day</div>
+                <div class="day-number">8</div>
+            </div>
+            <div class="day-card" role="tab" aria-selected="false" tabindex="-1">
+                <div class="day-label">Wed</div>
+                <div class="day-number">9</div>
+            </div>
+            <button class="day-nav-btn" aria-label="Next day">?</button>
+        </div>
+
+        <div class="main-grid">
+            <article class="checklist-card" aria-labelledby="checklist-title">
+                <div class="card-header">
+                    <h2 id="checklist-title">Checklist</h2>
+                    <button class="card-menu-btn" aria-label="Checklist menu">?</button>
+                </div>
+
+                <div class="task-item" data-component="task-card" data-task-id="1" data-task-status="in-progress">
+                    <div class="task-header-row">
+                        <input type="checkbox" class="task-checkbox" id="task1" aria-label="Mark Design Homepage Hero as complete">
+                        <label for="task1" class="task-title">Design Homepage Hero</label>
+                        <span class="task-status">In Progress</span>
+                        <button class="task-toggle" aria-label="Toggle task status"></button>
+                    </div>
+                    <div class="task-progress">
+                        <div class="task-progress-fill" style="width: 65%;"></div>
+                    </div>
+                    <div class="task-details">
+                        <div class="task-detail-section">
+                            <div class="task-detail-title">Design Homepage Hero</div>
+                            <div class="task-detail-content">Due Time: 3:00 PM</div>
+                            <div class="task-detail-content">Owner: [Blank Field]</div>
+                            <div class="task-links">
+                                <a href="#" class="task-link">Figma File</a>
+                                <a href="#" class="task-link">Jira Ticket</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="task-item" data-component="task-card" data-task-id="2" data-task-status="todo">
+                    <div class="task-header-row">
+                        <input type="checkbox" class="task-checkbox" id="task2" aria-label="Mark Develop Login API as complete">
+                        <label for="task2" class="task-title">Develop Login API</label>
+                    </div>
+                    <div class="task-progress">
+                        <div class="task-progress-fill" style="width: 45%;"></div>
+                    </div>
+                </div>
+
+                <div class="task-item" data-component="task-card" data-task-id="3" data-task-status="todo">
+                    <div class="task-header-row">
+                        <input type="checkbox" class="task-checkbox" id="task3" aria-label="Mark Develop Link API as complete">
+                        <label for="task3" class="task-title">Develop Link API</label>
+                    </div>
+                    <div class="task-progress">
+                        <div class="task-progress-fill" style="width: 80%;"></div>
+                    </div>
+                </div>
+
+                <div class="task-item" data-component="task-card" data-task-id="4" data-task-status="in-progress">
+                    <div class="task-header-row">
+                        <input type="checkbox" class="task-checkbox" id="task4" aria-label="Mark Draft Social Copy as complete">
+                        <label for="task4" class="task-title">Draft Social Copy</label>
+                        <span class="task-status">In Progress</span>
+                        <button class="task-toggle" aria-label="Toggle task status"></button>
+                    </div>
+                    <div class="task-progress">
+                        <div class="task-progress-fill" style="width: 90%;"></div>
+                    </div>
+                </div>
+
+                <div class="task-item" data-component="task-card" data-task-id="5" data-task-status="in-progress">
+                    <div class="task-header-row">
+                        <input type="checkbox" class="task-checkbox" id="task5" aria-label="Mark Draft Social Ling as complete">
+                        <label for="task5" class="task-title">Draft Social Ling</label>
+                        <span class="task-status">In Progress</span>
+                        <button class="task-toggle" aria-label="Toggle task status"></button>
+                    </div>
+                    <div class="task-progress">
+                        <div class="task-progress-fill" style="width: 60%;"></div>
+                    </div>
+                </div>
+
+                <div class="task-item" data-component="task-card" data-task-id="6" data-task-status="in-progress">
+                    <div class="task-header-row">
+                        <input type="checkbox" class="task-checkbox" id="task6" aria-label="Mark Setup Project Repo as complete">
+                        <label for="task6" class="task-title">Setup Project Repo</label>
+                        <span class="task-status">In Progress</span>
+                        <button class="task-toggle off" aria-label="Toggle task status"></button>
+                    </div>
+                    <div class="task-progress">
+                        <div class="task-progress-fill" style="width: 35%;"></div>
+                    </div>
+                </div>
+
+                <div class="task-item" data-component="task-card" data-task-id="7" data-task-status="in-progress">
+                    <div class="task-header-row">
+                        <input type="checkbox" class="task-checkbox" id="task7" aria-label="Mark Define User Personas as complete">
+                        <label for="task7" class="task-title">Define User Personas</label>
+                        <span class="task-status">In Progress</span>
+                        <button class="task-toggle off" aria-label="Toggle task status"></button>
+                    </div>
+                    <div class="task-progress">
+                        <div class="task-progress-fill" style="width: 50%;"></div>
+                    </div>
+                </div>
+
+                <div class="task-item" data-component="task-card" data-task-id="8" data-task-status="todo">
+                    <div class="task-header-row">
+                        <input type="checkbox" class="task-checkbox" id="task8" aria-label="Mark Define User Personas as complete">
+                        <label for="task8" class="task-title">Define User Personas</label>
+                    </div>
+                    <div class="task-progress">
+                        <div class="task-progress-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="assets-card" aria-labelledby="assets-title">
+                <div class="card-header">
+                    <h2 id="assets-title">Auto-Generated Assets</h2>
+                </div>
+
+                <div class="asset-section">
+                    <h3>Monospace Copy</h3>
+                    <div class="asset-text">
+                        Lorem ipsum dolor sit amet,<br>
+                        consectetur adipiscing elit,<br>
+                        sed do eiusmod tempor<br>
+                        incididunt ut labore et dolore<br>
+                        magna aliqua. Ut enim ad<br>
+                        minim veniam, quis nostrud<br>
+                        exercitation
+                    </div>
+                </div>
+
+                <div class="asset-section">
+                    <h3>Social Post</h3>
+                    <div class="asset-text">
+                        Lorem ipsum dolor sit amet,<br>
+                        consectetur adipiscing elit, sed<br>
+                        do eiusmod tempor.
+                    </div>
+                    <div class="asset-preview">
+                        <span class="asset-preview-icon">??</span>
+                    </div>
+                    <div class="asset-grid">
+                        <div class="asset-thumbnail" data-src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=200&h=200&fit=crop"></div>
+                        <div class="asset-thumbnail" data-src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=200&h=200&fit=crop"></div>
+                        <div class="asset-thumbnail" data-src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=200&h=200&fit=crop"></div>
+                        <div class="asset-thumbnail" data-src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=200&h=200&fit=crop"></div>
+                        <div class="asset-thumbnail" data-src="https://images.unsplash.com/photo-1618172193622-ae2d025f4032?w=200&h=200&fit=crop"></div>
+                        <div class="asset-thumbnail" data-src="https://images.unsplash.com/photo-1618556450994-a6a128ef0d9d?w=200&h=200&fit=crop"></div>
+                    </div>
+                    <button class="generate-btn">Generate Variations</button>
+                </div>
+            </article>
+        </div>
+
+        <section class="notes-card" aria-labelledby="notes-title">
+            <div class="card-header">
+                <h2 id="notes-title">Notes</h2>
+            </div>
+            <textarea class="notes-textarea" placeholder="Add a venitx text here..." aria-label="Sprint notes"></textarea>
+        </section>
+
+        <section class="dependencies-card" aria-labelledby="dependencies-title">
+            <div class="card-header">
+                <h2 id="dependencies-title">Dependencies</h2>
+            </div>
+            <div class="dependency-item">
+                <div class="dependency-box">Design Homepage Hero</div>
+                <span class="dependency-arrow" aria-hidden="true">?</span>
+                <div class="dependency-box">Develop Login API</div>
+            </div>
+            <div class="dependency-item">
+                <div class="dependency-box">Develop Login API</div>
+                <span class="dependency-arrow" aria-hidden="true">?</span>
+                <div class="dependency-box">Setup Project Repo</div>
+            </div>
+            <div class="dependency-item">
+                <div class="dependency-box">Draft Social Copy</div>
+                <span class="dependency-arrow" aria-hidden="true">?</span>
+                <div class="dependency-box">Define User Personas</div>
+            </div>
+        </section>
+
+        <section class="timeline-card" aria-labelledby="timeline-title">
+            <div class="card-header">
+                <h2 id="timeline-title">Mini Timeline of Today</h2>
+            </div>
+            <div class="timeline-wrapper">
+                <div class="timeline-line">
+                    <div class="timeline-progress"></div>
+                </div>
+                <div class="timeline-events">
+                    <div class="timeline-event">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-event-title">Start Events</div>
+                        <div class="timeline-event-time">Time: 3:00 PM</div>
+                    </div>
+                    <div class="timeline-event">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-event-title">Design Homepage Hero</div>
+                        <div class="timeline-event-time">Time: 5:00 PM</div>
+                    </div>
+                    <div class="timeline-event">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-event-title">Draft Social Copy</div>
+                        <div class="timeline-event-time">Time: 5:00 AM</div>
+                    </div>
+                    <div class="timeline-event">
+                        <div class="timeline-dot future"></div>
+                        <div class="timeline-event-title">Key Event & Event</div>
+                        <div class="timeline-event-time">Time: 7:00 PM</div>
+                    </div>
+                    <div class="timeline-event">
+                        <div class="timeline-dot future"></div>
+                        <div class="timeline-event-title">Generate: Events</div>
+                        <div class="timeline-event-time">Time: 7:00 PM</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <aside data-component="task-drawer" aria-hidden="true" aria-labelledby="drawer-title" id="task-drawer" hidden>
+            <div style="background:#2D3F5F;border:2px solid #FF6B35;border-radius:12px;padding:16px;max-width:420px;margin:16px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <h3 id="drawer-title" style="margin:0;font-size:16px;">Task Details</h3>
+                    <button data-action="close" aria-label="Close drawer" style="background:none;border:none;color:#8B94A3;font-size:18px;">?</button>
+                </div>
+                <div style="color:#8B94A3;font-size:14px;">
+                    Select a task to view details.
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <footer role="contentinfo">
+        <p>&copy; 2024 SprintPilot. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Mobile menu toggle
+        (function() {
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            const nav = document.querySelector('.nav-links');
+            
+            if (toggle && nav) {
+                toggle.addEventListener('click', function() {
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    this.setAttribute('aria-expanded', !isExpanded);
+                    nav.classList.toggle('active');
+                });
+
+                // Close menu on Escape
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && nav.classList.contains('active')) {
+                        toggle.setAttribute('aria-expanded', 'false');
+                        nav.classList.remove('active');
+                        toggle.focus();
+                    }
+                });
+            }
+        })();
+
+        // Active navigation highlighting
+        (function() {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const currentHash = window.location.hash;
+            
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === currentPage || 
+                    (currentPage === 'daily.html' && href === 'services.html') ||
+                    (currentHash && href.includes(currentHash))) {
+                    link.classList.add('active');
+                }
+            });
+        })();
+
+        // Smooth scroll for same-page anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#' || href.length <= 1) return;
+                
+                // Check if it's a same-page anchor
+                const linkPath = this.pathname || window.location.pathname;
+                const currentPath = window.location.pathname;
+                
+                if (linkPath === currentPath) {
+                    const target = document.querySelector(href);
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+
+        // Lazy load enhancement for images
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const element = entry.target;
+                        if (element.dataset.src) {
+                            if (element.tagName === 'IMG') {
+                                element.src = element.dataset.src;
+                            } else {
+                                element.style.backgroundImage = `url(${element.dataset.src})`;
+                            }
+                            element.removeAttribute('data-src');
+                        }
+                        if (element.dataset.bg) {
+                            element.style.backgroundImage = `url(${element.dataset.bg})`;
+                            element.removeAttribute('data-bg');
+                        }
+                        observer.unobserve(element);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src], [data-bg]').forEach(element => {
+                imageObserver.observe(element);
+            });
+        } else {
+            // Fallback for browsers without IntersectionObserver
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+            });
+            document.querySelectorAll('[data-bg]').forEach(element => {
+                element.style.backgroundImage = `url(${element.dataset.bg})`;
+                element.removeAttribute('data-bg');
+            });
+        }
+
+        // Task checkbox interaction
+        document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const taskItem = this.closest('.task-item');
+                if (this.checked) {
+                    taskItem.classList.add('completed');
+                } else {
+                    taskItem.classList.remove('completed');
+                }
+            });
+        });
+
+        // Task expansion
+        document.querySelectorAll('.task-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                // Don't expand if clicking checkbox or toggle
+                if (e.target.classList.contains('task-checkbox') || 
+                    e.target.classList.contains('task-toggle')) {
+                    return;
+                }
+                this.classList.toggle('expanded');
+
+                // Open task drawer with details (progressive enhancement)
+                const drawer = document.querySelector('[data-component="task-drawer"]');
+                if (drawer) {
+                    const id = this.getAttribute('data-task-id');
+                    drawer.removeAttribute('hidden');
+                    drawer.setAttribute('aria-hidden', 'false');
+                    drawer.classList.add('is-open');
+                    // populate drawer title if possible
+                    const titleEl = drawer.querySelector('#drawer-title');
+                    if (titleEl) {
+                        const label = this.querySelector('.task-title') ? this.querySelector('.task-title').textContent.trim() : ('Task ' + id);
+                        titleEl.textContent = label;
+                    }
+                }
+            });
+        });
+
+        // Drawer close button handler (delegated)
+        document.addEventListener('click', function(e) {
+            const actionClose = e.target.closest('[data-action="close"]');
+            if (actionClose) {
+                const drawer = document.querySelector('[data-component="task-drawer"]');
+                if (drawer) {
+                    drawer.setAttribute('aria-hidden', 'true');
+                    drawer.classList.remove('is-open');
+                    drawer.setAttribute('hidden', '');
+                }
+            }
+        });
+
+        // Task toggle buttons
+        document.querySelectorAll('.task-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('off');
+            });
+        });
+
+        // Day selector
+        document.querySelectorAll('.day-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.day-card').forEach(c => {
+                    c.classList.remove('active');
+                    c.setAttribute('aria-selected', 'false');
+                    c.setAttribute('tabindex', '-1');
+                });
+                this.classList.add('active');
+                this.setAttribute('aria-selected', 'true');
+                this.setAttribute('tabindex', '0');
+            });
+
+            // Keyboard navigation for day cards
+            card.addEventListener('keydown', function(e) {
+                const cards = Array.from(document.querySelectorAll('.day-card'));
+                const currentIndex = cards.indexOf(this);
+                
+                if (e.key === 'ArrowRight' && currentIndex < cards.length - 1) {
+                    e.preventDefault();
+                    cards[currentIndex + 1].focus();
+                    cards[currentIndex + 1].click();
+                } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                    e.preventDefault();
+                    cards[currentIndex - 1].focus();
+                    cards[currentIndex - 1].click();
+                } else if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+        });
+
+        // Generate button interaction
+        const generateBtn = document.querySelector('.generate-btn');
+        if (generateBtn) {
+            generateBtn.addEventListener('click', function() {
+                this.textContent = 'Generating...';
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    this.textContent = 'Generate Variations';
+                    this.disabled = false;
+                }, 2000);
+            });
+        }
+
+        // Keyboard accessibility for buttons
+        document.querySelectorAll('.card-menu-btn, .task-more-btn').forEach(btn => {
+            btn.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+        });
+
+        // Asset thumbnail keyboard navigation
+        document.querySelectorAll('.asset-thumbnail').forEach(thumb => {
+            thumb.setAttribute('tabindex', '0');
+            thumb.setAttribute('role', 'button');
+            thumb.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+        });
+
+        // Maintain focus visibility
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-nav');
+            }
+        });
+
+        document.addEventListener('mousedown', function() {
+            document.body.classList.remove('keyboard-nav');
+        });
+    </script>
+
+    <div data-component="toast-root" aria-live="polite" aria-atomic="true" class="visually-hidden"></div>
+</body>
+</html>
