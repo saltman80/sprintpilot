@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SprintPilot Coach & Progress Dashboard - Track your sprint progress, velocity, and coaching recommendations">
+    <meta name="keywords" content="sprint, coaching, dashboard, progress, velocity, agile">
+    <title>Coach & Progress Dashboard | SprintPilot</title>
+    <link rel="canonical" href="/coach.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0A1628;
+            color: #FFFFFF;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Skip Link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #FF6B35;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: rgba(10, 22, 40, 0.95);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.2s;
+            padding: 8px 0;
+        }
+
+        .nav-links a:hover,
+        .nav-links a:focus {
+            color: #FF6B35;
+            outline: none;
+        }
+
+        .nav-links a.active {
+            color: #FF6B35;
+            border-bottom: 2px solid #FF6B35;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: 2px solid #FF6B35;
+            color: #FF6B35;
+            font-size: 24px;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 32px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .breadcrumb-separator {
+            color: #8B94A3;
+        }
+
+        .breadcrumb-current {
+            color: #FFFFFF;
+        }
+
+        /* Sprint Status */
+        .sprint-status {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .sprint-status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .sprint-status-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .sprint-status-time {
+            color: #8B94A3;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #1a2942;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FF6B35 0%, #ff8c5a 100%);
+            width: 70%;
+            border-radius: 4px;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        /* AI Coach Card */
+        .ai-coach-card {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 320px;
+        }
+
+        .ai-badge {
+            width: 100%;
+            max-width: 280px;
+            height: auto;
+        }
+
+        /* Chat Card */
+        .chat-card {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            min-height: 320px;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .chat-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .chat-menu-btn {
+            background: none;
+            border: none;
+            color: #8B94A3;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .chat-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            background: #1a2942;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .message-action {
+            background: #3d5170;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .chat-input-wrapper {
+            position: relative;
+        }
+
+        .chat-input {
+            width: 100%;
+            background: #1a2942;
+            border: 1px solid #3d5170;
+            border-radius: 8px;
+            padding: 12px 40px 12px 16px;
+            color: #FFFFFF;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .chat-input::placeholder {
+            color: #8B94A3;
+        }
+
+        .chat-send-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #8B94A3;
+            cursor: pointer;
+            padding: 4px 8px;
+            font-size: 18px;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .metric-card {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-left: 4px solid #FF6B35;
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .metric-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        /* Completion Card */
+        .completion-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .completion-ring {
+            width: 160px;
+            height: 160px;
+        }
+
+        .completion-label {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #3d5170;
+        }
+
+        .completion-label h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #8B94A3;
+            margin-bottom: 4px;
+        }
+
+        .completion-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        /* Velocity Chart */
+        .velocity-chart {
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 16px 0;
+        }
+
+        .velocity-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bar-fill {
+            width: 100%;
+            background: #FF6B35;
+            border-radius: 4px 4px 0 0;
+            transition: height 0.3s;
+        }
+
+        .bar-label {
+            font-size: 12px;
+            color: #8B94A3;
+        }
+
+        /* Momentum Slider */
+        .momentum-section {
+            margin-top: 32px;
+        }
+
+        .momentum-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .momentum-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .info-icon {
+            color: #8B94A3;
+            font-size: 16px;
+            cursor: help;
+        }
+
+        .momentum-slider-wrapper {
+            position: relative;
+            padding: 24px 0;
+        }
+
+        .momentum-slider {
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #3d5170 0%, #FF6B35 50%, #00D9A5 100%);
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .momentum-indicator {
+            position: absolute;
+            top: 50%;
+            left: 55%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: #FF6B35;
+            border: 3px solid #FFFFFF;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(255, 107, 53, 0.4);
+        }
+
+        .momentum-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+        }
+
+        .momentum-labels span {
+            font-size: 12px;
+            color: #8B94A3;
+        }
+
+        /* Milestone Timeline */
+        .milestone-card {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .milestone-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .milestone-timeline {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .milestone-day {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .milestone-dot {
+            width: 100%;
+            height: 8px;
+            background: #3d5170;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .milestone-dot.completed {
+            background: #FF6B35;
+        }
+
+        .milestone-dot.completed::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            background: #FF6B35;
+            border: 3px solid #2D3F5F;
+            border-radius: 50%;
+        }
+
+        .milestone-label {
+            font-size: 12px;
+            color: #8B94A3;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .stat-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .stat-icon {
+            color: #8B94A3;
+            font-size: 20px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .stat-chart {
+            height: 60px;
+            margin-bottom: 16px;
+        }
+
+        .stat-mini-chart {
+            width: 100%;
+            height: 100%;
+        }
+
+        .stat-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid #3d5170;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #8B94A3;
+        }
+
+        .stat-change {
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-change.positive {
+            color: #00D9A5;
+        }
+
+        .stat-change.negative {
+            color: #FF6B35;
+        }
+
+        /* Tasks Grid */
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .task-card {
+            background: #2D3F5F;
+            border: 2px solid #FF6B35;
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .task-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .task-menu-btn {
+            background: none;
+            border: none;
+            color: #8B94A3;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #1a2942;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .task-item:hover {
+            background: #233654;
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #8B94A3;
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .task-checkbox:checked {
+            background: #FF6B35;
+            border-color: #FF6B35;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .task-time {
+            font-size: 12px;
+            color: #8B94A3;
+        }
+
+        .task-more-btn {
+            background: none;
+            border: none;
+            color: #8B94A3;
+            cursor: pointer;
+            padding: 4px 8px;
+            font-size: 18px;
+        }
+
+        .blocked-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #1a2942;
+            border-radius: 8px;
+        }
+
+        .blocked-icon {
+            width: 20px;
+            height: 20px;
+            color: #FF6B35;
+            flex-shrink: 0;
+        }
+
+        .blocked-title {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        footer {
+            background: #0A1628;
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
+            padding: 24px;
+            text-align: center;
+            color: #8B94A3;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-grid,
+            .metrics-grid,
+            .stats-grid,
+            .tasks-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #0A1628;
+                flex-direction: column;
+                padding: 24px;
+                border-top: 1px solid rgba(255, 107, 53, 0.2);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .breadcrumb {
+                font-size: 20px;
+            }
+
+            .velocity-chart {
+                gap: 8px;
+            }
+
+            .milestone-timeline {
+                gap: 4px;
+            }
+
+            main {
+                padding: 24px 16px;
+            }
+        }
+
+        /* Accessibility */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Focus Styles */
+        *:focus {
+            outline: 2px solid #FF6B35;
+            outline-offset: 2px;
+        }
+
+        button:focus,
+        a:focus,
+        input:focus {
+            outline: 2px solid #FF6B35;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body data-page="coach">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header role="banner">
+        <nav role="navigation" aria-label="Main navigation" data-component="top-nav">
+            <a href="index.html" class="logo" aria-label="SprintPilot home">SprintPilot</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+                ?
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html#hero" data-nav="home">Home</a></li>
+                <li><a href="services.html" data-nav="services">Services</a></li>
+                <li><a href="index.html#about" data-nav="about">About</a></li>
+                <li><a href="index.html#contact" data-nav="contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main-content" role="main">
+        <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
+            <span class="logo">SprintPilot</span>
+            <span class="breadcrumb-separator" aria-hidden="true">?</span>
+            <span class="breadcrumb-current">Coach & Progress Dashboard</span>
+        </div>
+
+        <section class="sprint-status" aria-labelledby="sprint-status-title">
+            <div class="sprint-status-header">
+                <h2 id="sprint-status-title">10-day sprint status</h2>
+                <span class="sprint-status-time">Regisned 2d 17m</span>
+            </div>
+            <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" aria-label="Sprint progress 70%">
+                <div class="progress-bar-fill"></div>
+            </div>
+        </section>
+
+        <div class="dashboard-grid">
+            <article class="ai-coach-card" aria-labelledby="ai-coach-title">
+                <h2 id="ai-coach-title" class="visually-hidden">AI Coach Assistant</h2>
+                <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=400&fit=crop" 
+                     alt="AI Coach badge with holographic shield design" 
+                     class="ai-badge"
+                     loading="lazy">
+            </article>
+
+            <article class="chat-card" aria-labelledby="chat-title" data-component="coach-chat">
+                <div class="chat-header">
+                    <h3 id="chat-title">Chat</h3>
+                    <button class="chat-menu-btn" aria-label="Chat menu">?</button>
+                </div>
+                <div class="chat-messages" role="log" aria-live="polite" aria-atomic="false">
+                    <div class="chat-message" data-suggestion-id="sug-1">
+                        <span class="chat-icon" aria-hidden="true">??</span>
+                        <div>
+                            <div class="message-content">
+                                <strong>Coach:</strong> Velocity is up. Focus on blocking issues.
+                            </div>
+                            <div class="message-action">
+                                Resolve Jira Ticket #123. 
+                                <span aria-hidden="true">?</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-message" data-suggestion-id="sug-2">
+                        <span class="chat-icon" aria-hidden="true">?</span>
+                        <div class="message-content">
+                            Resolve Jira Ticket #123.
+                        </div>
+                    </div>
+                    <div class="chat-message" data-suggestion-id="sug-3">
+                        <span class="chat-icon" aria-hidden="true">??</span>
+                        <div class="message-content">
+                            <strong>Coach:</strong> Suggested Actions you can option to actions.
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input-wrapper">
+                    <input type="text" 
+                           class="chat-input" 
+                           placeholder="Type a message..." 
+                           aria-label="Chat message input">
+                    <button class="chat-send-btn" aria-label="Send message">?</button>
+                </div>
+            </article>
+        </div>
+
+        <div class="metrics-grid">
+            <article class="metric-card" aria-labelledby="completion-title">
+                <h3 id="completion-title">Completion</h3>
+                <div class="completion-visual">
+                    <svg class="completion-ring" viewBox="0 0 160 160" aria-hidden="true" data-svg="ring">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#3d5170" stroke-width="16"/>
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#FF6B35" stroke-width="16"
+                                stroke-dasharray="440" stroke-dashoffset="132" 
+                                transform="rotate(-90 80 80)" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="completion-label">
+                    <h4>Progress</h4>
+                    <div class="completion-value" aria-label="70 percent complete">70%</div>
+                </div>
+            </article>
+
+            <article class="metric-card" aria-labelledby="velocity-title">
+                <h3 id="velocity-title">Velocity</h3>
+                <div class="velocity-chart" role="img" aria-label="Velocity chart showing daily performance">
+                    <div class="velocity-bar">
+                        <div class="bar-fill" style="height: 60px;"></div>
+                        <span class="bar-label">Mon</span>
+                    </div>
+                    <div class="velocity-bar">
+                        <div class="bar-fill" style="height: 45px;"></div>
+                        <span class="bar-label">Feb</span>
+                    </div>
+                    <div class="velocity-bar">
+                        <div class="bar-fill" style="height: 70px;"></div>
+                        <span class="bar-label">Mar</span>
+                    </div>
+                    <div class="velocity-bar">
+                        <div class="bar-fill" style="height: 80px;"></div>
+                        <span class="bar-label">Apr</span>
+                    </div>
+                    <div class="velocity-bar">
+                        <div class="bar-fill" style="height: 55px;"></div>
+                        <span class="bar-label">May</span>
+                    </div>
+                    <div class="velocity-bar">
+                        <div class="bar-fill" style="height: 65px;"></div>
+                        <span class="bar-label">Thu</span>
+                    </div>
+                    <div class="velocity-bar">
+                        <div class="bar-fill" style="height: 58px;"></div>
+                        <span class="bar-label">Fri</span>
+                    </div>
+                    <div class="velocity-bar">
+                        <div class="bar-fill" style="height: 95px;"></div>
+                        <span class="bar-label">Sat</span>
+                    </div>
+                    <div class="velocity-bar">
+                        <div class="bar-fill" style="height: 30px;"></div>
+                        <span class="bar-label">Sun</span>
+                    </div>
+                </div>
+                <div class="momentum-section">
+                    <div class="momentum-header">
+                        <h3>Momentum</h3>
+                        <span class="info-icon" aria-label="Information about momentum">?</span>
+                    </div>
+                    <div class="momentum-slider-wrapper">
+                        <div class="momentum-slider" role="img" aria-label="Momentum level indicator">
+                            <div class="momentum-indicator"></div>
+                        </div>
+                        <div class="momentum-labels">
+                            <span>Low</span>
+                            <span>Momentum</span>
+                            <span>High</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <section class="milestone-card" aria-labelledby="milestone-title">
+            <h3 id="milestone-title">10 day Milestone</h3>
+            <div class="milestone-timeline" role="img" aria-label="10 day milestone progress, 8 out of 10 days completed">
+                <div class="milestone-day">
+                    <div class="milestone-dot completed"></div>
+                    <span class="milestone-label">01</span>
+                </div>
+                <div class="milestone-day">
+                    <div class="milestone-dot completed"></div>
+                    <span class="milestone-label">02</span>
+                </div>
+                <div class="milestone-day">
+                    <div class="milestone-dot completed"></div>
+                    <span class="milestone-label">03</span>
+                </div>
+                <div class="milestone-day">
+                    <div class="milestone-dot completed"></div>
+                    <span class="milestone-label">04</span>
+                </div>
+                <div class="milestone-day">
+                    <div class="milestone-dot completed"></div>
+                    <span class="milestone-label">05</span>
+                </div>
+                <div class="milestone-day">
+                    <div class="milestone-dot completed"></div>
+                    <span class="milestone-label">06</span>
+                </div>
+                <div class="milestone-day">
+                    <div class="milestone-dot completed"></div>
+                    <span class="milestone-label">07</span>
+                </div>
+                <div class="milestone-day">
+                    <div class="milestone-dot completed"></div>
+                    <span class="milestone-label">08</span>
+                </div>
+                <div class="milestone-day">
+                    <div class="milestone-dot"></div>
+                    <span class="milestone-label">09</span>
+                </div>
+                <div class="milestone-day">
+                    <div class="milestone-dot"></div>
+                    <span class="milestone-label">10</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="stats-grid">
+            <article class="stat-card" aria-labelledby="traffic-title">
+                <div class="stat-header">
+                    <h3 id="traffic-title">Traffic</h3>
+                    <span class="stat-icon" aria-hidden="true">?</span>
+                </div>
+                <div class="stat-value">1.75K</div>
+                <div class="stat-chart" role="img" aria-label="Traffic trend chart">
+                    <svg class="stat-mini-chart" viewBox="0 0 200 60" preserveAspectRatio="none">
+                        <polyline points="0,45 25,42 50,38 75,35 100,40 125,32 150,28 175,30 200,25" 
+                                  fill="none" stroke="#FF6B35" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="stat-footer">
+                    <span class="stat-label">Traffic trowth</span>
+                    <span class="stat-change positive">? 1.00%</span>
+                </div>
+                <div class="stat-footer">
+                    <span class="stat-label"></span>
+                    <span class="stat-value" style="font-size: 20px;">3.2M</span>
+                </div>
+            </article>
+
+            <article class="stat-card" aria-labelledby="leads-title">
+                <div class="stat-header">
+                    <h3 id="leads-title">Leads</h3>
+                    <span class="stat-icon" aria-hidden="true">?</span>
+                </div>
+                <div class="stat-value">332</div>
+                <div class="stat-chart" role="img" aria-label="Leads trend chart">
+                    <svg class="stat-mini-chart" viewBox="0 0 200 60" preserveAspectRatio="none">
+                        <polyline points="0,40 25,38 50,35 75,40 100,33 125,30 150,35 175,28 200,25" 
+                                  fill="none" stroke="#FF6B35" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="stat-footer">
+                    <span class="stat-label">Leads $kwxth</span>
+                    <span class="stat-change negative">? 11.2%</span>
+                </div>
+                <div class="stat-footer">
+                    <span class="stat-label"></span>
+                    <span class="stat-value" style="font-size: 20px;">4.8K</span>
+                </div>
+            </article>
+
+            <article class="stat-card" aria-labelledby="conversions-title">
+                <div class="stat-header">
+                    <h3 id="conversions-title">Conversions</h3>
+                    <span class="stat-icon" aria-hidden="true">?</span>
+                </div>
+                <div class="stat-value">12.5%</div>
+                <div class="stat-chart" role="img" aria-label="Conversions trend chart">
+                    <svg class="stat-mini-chart" viewBox="0 0 200 60" preserveAspectRatio="none">
+                        <polyline points="0,50 25,48 50,45 75,40 100,38 125,35 150,28 175,32 200,25" 
+                                  fill="none" stroke="#FF6B35" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="stat-footer">
+                    <span class="stat-label">Conversions</span>
+                    <span class="stat-change positive">? 1.00%</span>
+                </div>
+                <div class="stat-footer">
+                    <span class="stat-label"></span>
+                    <span class="stat-value" style="font-size: 20px;">33%</span>
+                </div>
+            </article>
+        </div>
+
+        <div class="tasks-grid">
+            <article class="task-card" aria-labelledby="recommended-title" data-component="task-card" data-task-id="tasklist-recommended">
+                <div class="task-header">
+                    <h3 id="recommended-title">Recommended Tasks</h3>
+                    <button class="task-menu-btn" aria-label="Task list menu">?</button>
+                </div>
+                <div class="task-list">
+                    <div class="task-item" data-task-id="t-rec-1">
+                        <input type="checkbox" class="task-checkbox" id="task1" aria-label="Mark task as complete">
+                        <div class="task-content">
+                            <div class="task-title">Recommended Tasks</div>
+                            <div class="task-time">Reset a day ago</div>
+                        </div>
+                        <button class="task-more-btn" aria-label="Task options">?</button>
+                    </div>
+                    <div class="task-item" data-task-id="t-rec-2">
+                        <input type="checkbox" class="task-checkbox" id="task2" aria-label="Mark task as complete">
+                        <div class="task-content">
+                            <div class="task-title">Recommended Tasks</div>
+                            <div class="task-time">Reset a day ago</div>
+                        </div>
+                        <button class="task-more-btn" aria-label="Task options">?</button>
+                    </div>
+                    <div class="task-item" data-task-id="t-rec-3">
+                        <input type="checkbox" class="task-checkbox" id="task3" aria-label="Mark task as complete">
+                        <div class="task-content">
+                            <div class="task-title">Recommended Tasks</div>
+                            <div class="task-time">Reset a day ago</div>
+                        </div>
+                        <button class="task-more-btn" aria-label="Task options">?</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="task-card" aria-labelledby="blocked-title" data-component="task-card" data-task-id="tasklist-blocked">
+                <div class="task-header">
+                    <h3 id="blocked-title">Blocked Items</h3>
+                    <button class="task-menu-btn" aria-label="Blocked items menu">?</button>
+                </div>
+                <div class="task-list">
+                    <div class="blocked-item" data-task-id="blocked-1">
+                        <span class="blocked-icon" aria-hidden="true">?</span>
+                        <span class="blocked-title">Resolve Jira Ticket #123</span>
+                        <button class="task-more-btn" aria-label="Item options">?</button>
+                    </div>
+                    <div class="blocked-item" data-task-id="blocked-2">
+                        <span class="blocked-icon" aria-hidden="true">?</span>
+                        <span class="blocked-title">Resolve Jira Ticket #124</span>
+                        <button class="task-more-btn" aria-label="Item options">?</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer role="contentinfo">
+        <p>&copy; 2024 SprintPilot. All rights reserved.</p>
+    </footer>
+
+    <div data-component="toast-root" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="app.js" defer></script>
+    <script>
+        // Mobile menu toggle
+        (function() {
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            const nav = document.querySelector('.nav-links');
+            
+            if (toggle && nav) {
+                toggle.addEventListener('click', function() {
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    // ensure string boolean for aria attribute
+                    this.setAttribute('aria-expanded', String(!isExpanded));
+                    nav.classList.toggle('active');
+                });
+            }
+        })();
+
+        // Chat functionality
+        (function() {
+            const chatInput = document.querySelector('.chat-input');
+            const sendBtn = document.querySelector('.chat-send-btn');
+            const messages = document.querySelector('.chat-messages');
+
+            function sendMessage() {
+                if (!chatInput) return;
+                const text = chatInput.value.trim();
+                if (!text) return;
+
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chat-message';
+                messageDiv.innerHTML = `
+                    <span class="chat-icon" aria-hidden="true">?</span>
+                    <div class="message-content">${text}</div>
+                `;
+                if (messages) {
+                    messages.appendChild(messageDiv);
+                    messages.scrollTop = messages.scrollHeight;
+                }
+                chatInput.value = '';
+            }
+
+            if (sendBtn) {
+                sendBtn.addEventListener('click', sendMessage);
+            }
+
+            if (chatInput) {
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
+        })();
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Lazy load images with IntersectionObserver
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                            img.removeAttribute('data-src');
+                        }
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // Task checkbox interaction
+        document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const taskItem = this.closest('.task-item');
+                if (!taskItem) return;
+                if (this.checked) {
+                    taskItem.style.opacity = '0.6';
+                } else {
+                    taskItem.style.opacity = '1';
+                }
+            });
+        });
+
+        // Highlight active nav item
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            const href = link.getAttribute('href');
+            // simple match to current filename or same-page anchor when applicable
+            if (href === currentPage || (href && href.split('#')[0] === currentPage)) {
+                link.classList.add('active');
+            }
+        });
+
+        // Keyboard accessibility for custom elements
+        document.querySelectorAll('.task-more-btn, .chat-menu-btn, .task-menu-btn').forEach(btn => {
+            btn.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+        });
+
+        // Progress animation on load
+        window.addEventListener('load', function() {
+            const progressFill = document.querySelector('.progress-bar-fill');
+            if (progressFill) {
+                progressFill.style.transition = 'width 1s ease-out';
+            }
+        });
+    </script>
+</body>
+</html>
