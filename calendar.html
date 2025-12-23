@@ -1172,35 +1172,19 @@
 
     <script src="app.js" defer></script>
     <script>
-        // Mobile menu toggle
-        (function() {
-            const toggle = document.querySelector('.mobile-menu-toggle');
-            const navCenter = document.querySelector('.nav-center');
-            const navActions = document.querySelector('.nav-actions');
+        (() => {
+            const dayCards = document.querySelectorAll('.day-card');
+            const statusBadgeValue = document.querySelector('.sprint-status-badge strong');
+            const totalDays = dayCards.length || 10;
 
-            if (toggle && navCenter && navActions) {
-                toggle.addEventListener('click', function() {
-                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
-                    this.setAttribute('aria-expanded', String(!isExpanded));
-                    navCenter.classList.toggle('active');
-                    navActions.classList.toggle('active');
-                });
+            const setStatusBadge = (day) => {
+                if (statusBadgeValue) {
+                    statusBadgeValue.textContent = `Day ${day}/${totalDays}`;
+                }
+            };
 
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape' && navCenter.classList.contains('active')) {
-                        toggle.setAttribute('aria-expanded', 'false');
-                        navCenter.classList.remove('active');
-                        navActions.classList.remove('active');
-                        toggle.focus();
-                    }
-                });
-            }
-        })();
-
-        // Day card selection
-        const dayCards = document.querySelectorAll('.day-card');
-        dayCards.forEach(card => {
-            card.addEventListener('click', () => {
+            const selectDayCard = (card) => {
+                if (!card) return;
                 dayCards.forEach(c => {
                     c.classList.remove('active');
                     c.removeAttribute('aria-current');
@@ -1210,29 +1194,161 @@
                 card.setAttribute('aria-current', 'date');
                 card.setAttribute('aria-pressed', 'true');
 
-                // Emit custom event for day selection
                 const idx = card.getAttribute('data-day-index') || card.getAttribute('data-day');
-                document.dispatchEvent(new CustomEvent('sprint:day:selected', { detail: { dayIndex: idx } }));
-            });
-
-            // Use keydown for better accessibility (space/enter)
-            card.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') {
-                    e.preventDefault();
-                    card.click();
+                if (idx) {
+                    setStatusBadge(idx);
                 }
+                document.dispatchEvent(new CustomEvent('sprint:day:selected', { detail: { dayIndex: idx } }));
+            };
+
+            dayCards.forEach(card => {
+                card.addEventListener('click', () => selectDayCard(card));
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') {
+                        e.preventDefault();
+                        selectDayCard(card);
+                    }
+                });
             });
-        });
 
-        // Drag and drop for task cards
-        const taskCards = document.querySelectorAll('.task-card');
-        const boardColumns = document.querySelectorAll('.board-column');
+            const initialActive = document.querySelector('.day-card.active') || dayCards[0];
+            if (initialActive) {
+                selectDayCard(initialActive);
+            }
 
-        let draggedCard = null;
-        taskCards.forEach(card => {
-            card.addEventListener('dragstart', (e) => {
-                // mark dragging element and set minimal dataTransfer payload
-                draggedCard = card;
-                e.dataTransfer.effectAllowed = 'move';
-                try {
-                    e.dataTransfer.setData('text/plain', card.getAttribute('da
+            const taskCards = document.querySelectorAll('.task-card');
+            const boardColumns = document.querySelectorAll('.board-column');
+            let draggedCard = null;
+
+            taskCards.forEach(card => {
+                card.addEventListener('dragstart', (e) => {
+                    draggedCard = card;
+                    card.classList.add('is-dragging');
+                    card.setAttribute('aria-grabbed', 'true');
+                    e.dataTransfer.effectAllowed = 'move';
+                    try {
+                        e.dataTransfer.setData('text/plain', card.dataset.taskId || '');
+                    } catch (err) {
+                        // Ignore if dataTransfer is not writable.
+                    }
+                });
+
+                card.addEventListener('dragend', () => {
+                    card.classList.remove('is-dragging');
+                    card.setAttribute('aria-grabbed', 'false');
+                    draggedCard = null;
+                });
+            });
+
+            boardColumns.forEach(column => {
+                column.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    column.classList.add('drag-over');
+                });
+
+                column.addEventListener('dragleave', () => {
+                    column.classList.remove('drag-over');
+                });
+
+                column.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    column.classList.remove('drag-over');
+                    if (!draggedCard) return;
+                    column.appendChild(draggedCard);
+                    draggedCard.classList.remove('is-dragging');
+                    draggedCard.setAttribute('aria-grabbed', 'false');
+                    draggedCard = null;
+                });
+            });
+
+            const meterBar = document.querySelector('.meter-bar');
+            if (meterBar) {
+                const meterFill = meterBar.querySelector('.meter-fill');
+                const meterHandle = meterBar.querySelector('.meter-handle');
+                const rawValue = parseInt(meterBar.getAttribute('aria-valuenow') || '0', 10);
+                const value = Number.isNaN(rawValue) ? 0 : Math.min(100, Math.max(0, rawValue));
+                if (meterFill) {
+                    meterFill.style.width = `${value}%`;
+                }
+                if (meterHandle) {
+                    meterHandle.style.left = `${value}%`;
+                }
+            }
+
+            const burndownCanvas = document.getElementById('burndownCanvas');
+            const burndownData = [680, 610, 580, 560, 530, 490, 420, 340, 260, 180, 80];
+            const burndownLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'];
+
+            const drawBurndown = () => {
+                if (!burndownCanvas || !burndownCanvas.getContext) return;
+                const ctx = burndownCanvas.getContext('2d');
+                const container = burndownCanvas.parentElement;
+                const width = container ? container.clientWidth : 640;
+                const height = 220;
+                const dpr = window.devicePixelRatio || 1;
+
+                burndownCanvas.width = width * dpr;
+                burndownCanvas.height = height * dpr;
+                burndownCanvas.style.width = `${width}px`;
+                burndownCanvas.style.height = `${height}px`;
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                ctx.clearRect(0, 0, width, height);
+
+                const padding = { top: 16, right: 20, bottom: 28, left: 32 };
+                const chartWidth = width - padding.left - padding.right;
+                const chartHeight = height - padding.top - padding.bottom;
+
+                const maxValue = Math.max(...burndownData, 0);
+                const minValue = 0;
+                const xStep = chartWidth / (burndownData.length - 1);
+
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+                ctx.lineWidth = 1;
+                const gridLines = 4;
+                for (let i = 0; i <= gridLines; i += 1) {
+                    const y = padding.top + (chartHeight / gridLines) * i;
+                    ctx.beginPath();
+                    ctx.moveTo(padding.left, y);
+                    ctx.lineTo(width - padding.right, y);
+                    ctx.stroke();
+                }
+
+                const gradient = ctx.createLinearGradient(0, padding.top, 0, height - padding.bottom);
+                gradient.addColorStop(0, 'rgba(255, 143, 53, 0.35)');
+                gradient.addColorStop(1, 'rgba(255, 143, 53, 0)');
+
+                ctx.beginPath();
+                burndownData.forEach((value, index) => {
+                    const x = padding.left + xStep * index;
+                    const y = padding.top + (1 - (value - minValue) / (maxValue - minValue)) * chartHeight;
+                    if (index === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                });
+
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#FF8F35';
+                ctx.stroke();
+
+                ctx.lineTo(padding.left + chartWidth, padding.top + chartHeight);
+                ctx.lineTo(padding.left, padding.top + chartHeight);
+                ctx.closePath();
+                ctx.fillStyle = gradient;
+                ctx.fill();
+
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+                ctx.font = '12px Inter, sans-serif';
+                burndownLabels.forEach((label, index) => {
+                    const x = padding.left + xStep * index;
+                    ctx.fillText(label, x - 8, height - 8);
+                });
+            };
+
+            drawBurndown();
+            window.addEventListener('resize', drawBurndown);
+        })();
+    </script>
+</body>
+</html>
