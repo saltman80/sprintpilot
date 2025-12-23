@@ -67,19 +67,43 @@
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 24px;
             font-weight: 700;
             color: #FFFFFF;
+            text-decoration: none;
         }
 
-        .nav-links {
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #FF6B35;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            color: #FFFFFF;
+        }
+
+        .logo-text span {
+            color: #FF6B35;
+        }
+
+        .nav-center {
             display: flex;
             gap: 32px;
             list-style: none;
             align-items: center;
         }
 
-        .nav-links a {
+        .nav-center a {
             color: #FFFFFF;
             font-size: 16px;
             font-weight: 500;
@@ -87,15 +111,55 @@
             padding: 8px 0;
         }
 
-        .nav-links a:hover,
-        .nav-links a:focus {
+        .nav-center a:hover,
+        .nav-center a:focus {
             color: #FF6B35;
             outline: none;
         }
 
-        .nav-links a.active {
+        .nav-center a.active {
             color: #FF6B35;
             border-bottom: 2px solid #FF6B35;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn-login {
+            background: transparent;
+            border: 2px solid #8B94A3;
+            color: #FFFFFF;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-login:hover {
+            border-color: #FF6B35;
+            color: #FF6B35;
+        }
+
+        .btn-start {
+            background: #FF6B35;
+            border: none;
+            color: #FFFFFF;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-start:hover {
+            background: #ff8052;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
         }
 
         .mobile-menu-toggle {
@@ -734,7 +798,8 @@
                 display: block;
             }
 
-            .nav-links {
+            .nav-center,
+            .nav-actions {
                 display: none;
                 position: absolute;
                 top: 100%;
@@ -746,7 +811,8 @@
                 border-top: 1px solid rgba(255, 107, 53, 0.2);
             }
 
-            .nav-links.active {
+            .nav-center.active,
+            .nav-actions.active {
                 display: flex;
             }
 
@@ -799,16 +865,24 @@
 
     <header role="banner">
         <nav role="navigation" aria-label="Main navigation" data-component="top-nav">
-            <a href="index.html" class="logo" aria-label="SprintPilot home">SprintPilot</a>
-            <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+            <a href="index.html" class="logo" aria-label="SprintPilot home" data-nav="home">
+                <div class="logo-icon">S</div>
+                <span class="logo-text">Sprint<span>Pilot</span></span>
+            </a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
                 ?
             </button>
-            <ul class="nav-links">
-                <li><a href="index.html#hero" data-nav="home">Home</a></li>
-                <li><a href="services.html" data-nav="services">Services</a></li>
-                <li><a href="index.html#about" data-nav="about">About</a></li>
-                <li><a href="index.html#contact" data-nav="contact">Contact</a></li>
+            <ul class="nav-center" id="nav-menu">
+                <li><a href="index.html" data-nav="home">Home</a></li>
+                <li><a href="setup.html" data-nav="setup">Setup</a></li>
+                <li><a href="calendar.html" data-nav="calendar">Calendar</a></li>
+                <li><a href="daily.html" data-nav="daily">Daily</a></li>
+                <li><a href="coach.html" aria-current="page" data-nav="coach">Coach</a></li>
             </ul>
+            <div class="nav-actions" id="nav-actions">
+                <button class="btn-login">Login</button>
+                <button class="btn-start">Start Sprint</button>
+            </div>
         </nav>
     </header>
 
@@ -1135,14 +1209,24 @@
         // Mobile menu toggle
         (function() {
             const toggle = document.querySelector('.mobile-menu-toggle');
-            const nav = document.querySelector('.nav-links');
+            const navCenter = document.querySelector('.nav-center');
+            const navActions = document.querySelector('.nav-actions');
             
-            if (toggle && nav) {
+            if (toggle && navCenter && navActions) {
                 toggle.addEventListener('click', function() {
                     const isExpanded = this.getAttribute('aria-expanded') === 'true';
-                    // ensure string boolean for aria attribute
                     this.setAttribute('aria-expanded', String(!isExpanded));
-                    nav.classList.toggle('active');
+                    navCenter.classList.toggle('active');
+                    navActions.classList.toggle('active');
+                });
+
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && navCenter.classList.contains('active')) {
+                        toggle.setAttribute('aria-expanded', 'false');
+                        navCenter.classList.remove('active');
+                        navActions.classList.remove('active');
+                        toggle.focus();
+                    }
                 });
             }
         })();
@@ -1233,11 +1317,11 @@
 
         // Highlight active nav item
         const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-        document.querySelectorAll('.nav-links a').forEach(link => {
+        document.querySelectorAll('.nav-center a').forEach(link => {
             const href = link.getAttribute('href');
-            // simple match to current filename or same-page anchor when applicable
-            if (href === currentPage || (href && href.split('#')[0] === currentPage)) {
+            if (href === currentPage || (currentPage === '' && href === 'index.html')) {
                 link.classList.add('active');
+                link.setAttribute('aria-current', 'page');
             }
         });
 
