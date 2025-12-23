@@ -56,27 +56,31 @@
         .logo-icon {
             width: 32px;
             height: 32px;
-            background: linear-gradient(135deg, #FF6B35 0%, #FF8F35 100%);
+            background: #FF6B35;
             border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 18px;
+        }
+
+        .logo-text {
+            color: #FFFFFF;
         }
 
         .logo-text span {
             color: #FF6B35;
         }
 
-        .nav-menu {
+        .nav-center {
             display: flex;
             gap: 32px;
             list-style: none;
             align-items: center;
         }
 
-        .nav-menu a {
+        .nav-center a {
             color: #FFFFFF;
             text-decoration: none;
             font-size: 15px;
@@ -84,7 +88,7 @@
             transition: color 0.2s;
         }
 
-        .nav-menu a:hover {
+        .nav-center a:hover {
             color: #FF6B35;
         }
 
@@ -594,12 +598,26 @@
         }
 
         @media (max-width: 768px) {
-            .nav-menu {
-                display: none;
-            }
-
             .mobile-menu-toggle {
                 display: block;
+            }
+
+            .nav-center,
+            .nav-actions {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #0A1628;
+                flex-direction: column;
+                padding: 24px;
+                border-top: 1px solid rgba(255, 107, 53, 0.2);
+            }
+
+            .nav-center.active,
+            .nav-actions.active {
+                display: flex;
             }
 
             .calendar-days {
@@ -647,27 +665,27 @@
 
     <header role="banner">
         <nav role="navigation" aria-label="Main navigation" data-component="top-nav">
-            <a href="index.html" class="logo" aria-label="SprintPilot Home">
+            <a href="index.html" class="logo" aria-label="SprintPilot home" data-nav="home">
                 <div class="logo-icon">S</div>
-                <div class="logo-text">Sprint<span>Pilot</span></div>
+                <span class="logo-text">Sprint<span>Pilot</span></span>
             </a>
-            
-            <ul id="nav-menu" class="nav-menu">
-                <li><a href="index.html" data-nav="home">Home</a></li>
-                <li><a href="setup.html" data-nav="setup">Services</a></li>
-                <li><a href="daily.html" data-nav="daily">About</a></li>
-                <li><a href="coach.html" data-nav="coach">Contact</a></li>
-                <li><a href="calendar.html" aria-current="page" data-nav="calendar" data-nav-active>Calendar</a></li>
-            </ul>
-
-            <div class="nav-actions">
-                <a href="/login" class="btn-login">Login</a>
-                <a href="/start-sprint" class="btn-primary">Start Sprint</a>
-            </div>
 
             <button class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation menu">
                 ?
             </button>
+
+            <ul id="nav-menu" class="nav-center">
+                <li><a href="index.html" data-nav="home">Home</a></li>
+                <li><a href="setup.html" data-nav="setup">Setup</a></li>
+                <li><a href="calendar.html" aria-current="page" data-nav="calendar">Calendar</a></li>
+                <li><a href="daily.html" data-nav="daily">Daily</a></li>
+                <li><a href="coach.html" data-nav="coach">Coach</a></li>
+            </ul>
+
+            <div class="nav-actions" id="nav-actions">
+                <a href="/login" class="btn-login">Login</a>
+                <a href="/start-sprint" class="btn-primary">Start Sprint</a>
+            </div>
         </nav>
     </header>
 
@@ -1154,39 +1172,30 @@
 
     <script src="app.js" defer></script>
     <script>
-        // Mobile menu toggle (guarded)
-        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-        const navMenu = document.querySelector('#nav-menu');
+        // Mobile menu toggle
+        (function() {
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            const navCenter = document.querySelector('.nav-center');
+            const navActions = document.querySelector('.nav-actions');
 
-        if (mobileMenuToggle && navMenu) {
-            mobileMenuToggle.addEventListener('click', () => {
-                const isExpanded = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
-                mobileMenuToggle.setAttribute('aria-expanded', String(!isExpanded));
-                // Toggle visual state rather than inline style toggles repeatedly
-                if (!isExpanded) {
-                    navMenu.style.display = 'flex';
-                    navMenu.style.flexDirection = 'column';
-                    navMenu.style.position = 'absolute';
-                    navMenu.style.top = '60px';
-                    navMenu.style.right = '24px';
-                    navMenu.style.background = '#2D3F5F';
-                    navMenu.style.padding = '16px';
-                    navMenu.style.borderRadius = '12px';
-                    navMenu.style.border = '2px solid #FF6B35';
-                } else {
-                    // revert to CSS default
-                    navMenu.style.display = '';
-                    navMenu.style.flexDirection = '';
-                    navMenu.style.position = '';
-                    navMenu.style.top = '';
-                    navMenu.style.right = '';
-                    navMenu.style.background = '';
-                    navMenu.style.padding = '';
-                    navMenu.style.borderRadius = '';
-                    navMenu.style.border = '';
-                }
-            });
-        }
+            if (toggle && navCenter && navActions) {
+                toggle.addEventListener('click', function() {
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    this.setAttribute('aria-expanded', String(!isExpanded));
+                    navCenter.classList.toggle('active');
+                    navActions.classList.toggle('active');
+                });
+
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && navCenter.classList.contains('active')) {
+                        toggle.setAttribute('aria-expanded', 'false');
+                        navCenter.classList.remove('active');
+                        navActions.classList.remove('active');
+                        toggle.focus();
+                    }
+                });
+            }
+        })();
 
         // Day card selection
         const dayCards = document.querySelectorAll('.day-card');
